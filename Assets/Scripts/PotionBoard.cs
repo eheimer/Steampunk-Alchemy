@@ -115,10 +115,6 @@ public class PotionBoard : MonoBehaviour
 
     public bool CheckBoard()
     {
-        if (GameManager.instance.isGameEnded)
-        {
-            return false;
-        }
         Debug.Log("Checking Board");
         bool hasMatched = false;
 

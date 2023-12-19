@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -11,75 +12,96 @@ public class GameManager : MonoBehaviour
     public GameObject potionPanel;
     public GameObject victoryPanel;
     public GameObject losePanel;
-    public int goal;
-    public int startingMoves;
-    public int moves;
-    public int points;
-
+    public int startingGoal; // when a new game starts, this is the goal
+    public int startingMoves; // number of moves per level
+    public int remainingMoves; // number of moves remaining for current level
+    public int remainingGoal; // number of points needed for current level
+    public int levelScore; // number of points scored in current level
     public TMP_Text pointsText;
     public TMP_Text movesText;
     public TMP_Text goalText;
+    public TMP_Text levelText;
     public TMP_Text victoryDescription;
     public TMP_Text loseDescription;
     public string victoryText = "Congratulations, you won in {moves} moves and scored {points} points!";
     public string loseText = "Unfortunately, you only got {points} points in {moves} moves. Better luck next time!";
+    public GameData gameData;
 
-    public bool isGameEnded;
     private void Awake()
     {
+        gameData = new GameData(startingGoal);
+        remainingGoal = gameData.Goal;
+        remainingMoves = startingMoves; // every level has the same number of moves
+        levelScore = 0;
         instance = this;
-        moves = startingMoves;
-    }
-
-    public void Initialize(int moves, int goal)
-    {
-        this.moves = moves;
-        this.goal = goal;
     }
 
     void Update()
     {
-        pointsText.text = "Points: " + points.ToString();
-        movesText.text = "Moves: " + moves.ToString();
-        goalText.text = "Goal: " + goal.ToString();
+        pointsText.text = (levelScore + gameData.Score).ToString();
+        movesText.text = remainingMoves.ToString();
+        goalText.text = Math.Max(remainingGoal, 0).ToString();
+        levelText.text = gameData.Level.ToString();
     }
 
     public void ProcessTurn(int pointsToGain, bool subtractMoves)
     {
-        points += pointsToGain;
+        levelScore += pointsToGain;
+        remainingGoal -= pointsToGain;
+
         if (subtractMoves)
         {
-            moves--;
+            remainingMoves--;
         }
-        if (points >= goal)
-        {
-            isGameEnded = true;
-            // PotionBoard.Instance.potionParent.SetActive(false);
-            potionPanel.SetActive(false);
-            //backgroundPanel.SetActive(true);
-            victoryDescription.text = victoryText.Replace("{moves}", (startingMoves - moves).ToString()).Replace("{points}", points.ToString());
-            victoryPanel.SetActive(true);
-            return;
-        }
-        if (moves <= 0)
-        {
-            isGameEnded = true;
-            //PotionBoard.Instance.potionParent.SetActive(false);
-            potionPanel.SetActive(false);
-            //backgroundPanel.SetActive(true);
-            loseDescription.text = loseText.Replace("{moves}", (startingMoves - moves).ToString()).Replace("{points}", points.ToString());
-            losePanel.SetActive(true);
-            return;
-        }
+        if (remainingGoal <= 0) WinLevel();
+        if (remainingMoves <= 0) GameOver();
     }
 
-    public void WinGame()
+    public void WinLevel()
+    {
+        potionPanel.SetActive(false);
+        victoryDescription.text = victoryText
+            .Replace("{moves}", GetUsedMoves())
+            .Replace("{points}", levelScore.ToString());
+        victoryPanel.SetActive(true);
+        return;
+    }
+
+    public void GameOver()
+    {
+        potionPanel.SetActive(false);
+        gameData.GameOver(levelScore);
+        loseDescription.text = loseText
+            .Replace("{moves}", GetUsedMoves())
+            .Replace("{points}", gameData.Score.ToString());
+        losePanel.SetActive(true);
+        return;
+    }
+
+    private string GetUsedMoves()
+    {
+        return (startingMoves - remainingMoves).ToString();
+    }
+
+    public void NextLevelButtonAction()
+    {
+        gameData.NextLevel(UnityEngine.Random.Range(5, 10), levelScore);
+        SceneManager.LoadScene(0);
+    }
+
+    public void RestartButtonAction()
     {
         SceneManager.LoadScene(0);
     }
 
-    public void LoseGame()
-    {
-        SceneManager.LoadScene(0);
-    }
+    // PlayerPrefs:
+    //   goal: int - score needed to win the current level
+    //     (default: startingGoal)
+    //     this gets increased by a random amt with each level
+    //   score: int - running score
+    //     this gets increased by the number of points scored each level
+    //   level: int - current level
+    //     (default: 1)
+    //   bestScore: int - best score
+    //   bestLevel: int - best level
 }
