@@ -2605,7 +2605,7 @@ MonoBehaviour:
   potionPanel: {fileID: 2050507463}
   victoryPanel: {fileID: 1535207692}
   gameOverPanel: {fileID: 1714489026}
-  startingGoal: 100
+  startingGoal: 40
   startingMoves: 10
   remainingMoves: 0
   remainingGoal: 0
