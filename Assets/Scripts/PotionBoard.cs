@@ -26,6 +26,8 @@ public class PotionBoard : MonoBehaviour
     [SerializeField]
     List<Potion> potionsToRemove = new();
 
+    public ParticleSystem matchParticlePrefab;
+
     //layoutArray
     public ArrayLayout arrayLayout;
     //public static of potionBoard
@@ -176,7 +178,10 @@ public class PotionBoard : MonoBehaviour
         foreach (Potion potion in potionsToRemove)
         {
             potion.isMatched = false;
+            Instantiate(matchParticlePrefab, potion.transform.position, Quaternion.identity);
         }
+        yield return new WaitForSeconds(0.5f);
+
         RemoveAndRefill(potionsToRemove);
         GameManager.instance.ProcessTurn(potionsToRemove.Count, subtractMoves);
         yield return new WaitForSeconds(0.4f);
@@ -194,6 +199,10 @@ public class PotionBoard : MonoBehaviour
             potionBoard[potion.xIndex, potion.yIndex].potion = null;
             Destroy(potion.gameObject);
         }
+
+
+
+
 
         for (int x = 0; x < width; x++)
         {
