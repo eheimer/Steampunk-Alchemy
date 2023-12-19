@@ -9,9 +9,10 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public GameObject scorePanel;
     public GameObject potionPanel;
     public GameObject victoryPanel;
-    public GameObject losePanel;
+    public GameObject gameOverPanel;
     public int startingGoal; // when a new game starts, this is the goal
     public int startingMoves; // number of moves per level
     public int remainingMoves; // number of moves remaining for current level
@@ -21,10 +22,11 @@ public class GameManager : MonoBehaviour
     public TMP_Text movesText;
     public TMP_Text goalText;
     public TMP_Text levelText;
-    public TMP_Text victoryDescription;
-    public TMP_Text loseDescription;
-    public string victoryText = "Congratulations, you won in {moves} moves and scored {points} points!";
-    public string loseText = "Unfortunately, you only got {points} points in {moves} moves. Better luck next time!";
+    public TMP_Text victoryLevel;
+    public TMP_Text gameOverLevel;
+    public TMP_Text gameOverScore;
+    public TMP_Text gameOverBestLevel;
+    public TMP_Text gameOverBestScore;
     public GameData gameData;
 
     private void Awake()
@@ -60,9 +62,7 @@ public class GameManager : MonoBehaviour
     public void WinLevel()
     {
         potionPanel.SetActive(false);
-        victoryDescription.text = victoryText
-            .Replace("{moves}", GetUsedMoves())
-            .Replace("{points}", levelScore.ToString());
+        victoryLevel.text = gameData.Level.ToString();
         victoryPanel.SetActive(true);
         return;
     }
@@ -70,22 +70,22 @@ public class GameManager : MonoBehaviour
     public void GameOver()
     {
         potionPanel.SetActive(false);
-        gameData.GameOver(levelScore);
-        loseDescription.text = loseText
-            .Replace("{moves}", GetUsedMoves())
-            .Replace("{points}", gameData.Score.ToString());
-        losePanel.SetActive(true);
-        return;
-    }
+        scorePanel.SetActive(false);
+        gameOverLevel.text = gameData.Level.ToString();
+        gameOverScore.text = (gameData.Score + levelScore).ToString();
+        gameOverBestLevel.text = gameData.bestLevel.ToString();
+        gameOverBestScore.text = gameData.bestScore.ToString();
 
-    private string GetUsedMoves()
-    {
-        return (startingMoves - remainingMoves).ToString();
+        gameData.GameOver(levelScore);
+        levelScore = 0;
+        gameOverPanel.SetActive(true);
+        return;
     }
 
     public void NextLevelButtonAction()
     {
         gameData.NextLevel(UnityEngine.Random.Range(5, 10), levelScore);
+        levelScore = 0;
         SceneManager.LoadScene(0);
     }
 
