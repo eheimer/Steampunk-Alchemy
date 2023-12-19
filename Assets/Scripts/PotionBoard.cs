@@ -44,22 +44,37 @@ public class PotionBoard : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
 
-            if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
+        if (Input.touchCount > 0 || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+        {
+            if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
             {
-                if (isProcessingMove)
+                if (isProcessingMove) return;
+                Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+                if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
                 {
-                    return;
+                    Potion potion = hit.collider.gameObject.GetComponent<Potion>();
+                    selectedPotion = potion;
                 }
-                Potion potion = hit.collider.gameObject.GetComponent<Potion>();
-                SelectPotion(potion);
+            }
+
+            if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) || Input.GetMouseButtonUp(0))
+            {
+                if (isProcessingMove) return;
+                Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
+                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+                if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
+                {
+                    Potion potion = hit.collider.gameObject.GetComponent<Potion>();
+                    if (potion != selectedPotion)
+                    {
+                        SwapPotion(potion, selectedPotion);
+                    }
+                }
+                selectedPotion = null;
             }
         }
-
     }
 
     void InitializeBoard()
@@ -337,22 +352,6 @@ public class PotionBoard : MonoBehaviour
     #endregion
 
     #region Swapping Potions
-
-    public void SelectPotion(Potion potion)
-    {
-        if (selectedPotion == potion)
-        {
-            selectedPotion = null;
-            return;
-        }
-        if (selectedPotion == null)
-        {
-            selectedPotion = potion;
-            return;
-        }
-        SwapPotion(potion, selectedPotion);
-        selectedPotion = null;
-    }
 
     private void SwapPotion(Potion current, Potion target)
     {
