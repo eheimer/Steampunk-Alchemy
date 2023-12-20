@@ -29,6 +29,10 @@ public class GameManager : MonoBehaviour
     public TMP_Text gameOverBestScore;
     public GameData gameData;
 
+    public AudioClip[] levelMusic;
+    public AudioClip levelWinClip;
+    public AudioClip gameOverClip;
+
     private void Awake()
     {
         gameData = new GameData(startingGoal);
@@ -36,6 +40,9 @@ public class GameManager : MonoBehaviour
         remainingMoves = startingMoves; // every level has the same number of moves
         levelScore = 0;
         instance = this;
+        // get a random element from the levelMusic array
+        gameObject.GetComponent<AudioSource>().clip = levelMusic[UnityEngine.Random.Range(0, levelMusic.Length)];
+        gameObject.GetComponent<AudioSource>().Play();
     }
 
     void Update()
@@ -61,6 +68,9 @@ public class GameManager : MonoBehaviour
 
     public void WinLevel()
     {
+        gameObject.GetComponent<AudioSource>().Stop();
+        gameObject.GetComponent<AudioSource>().clip = levelWinClip;
+        gameObject.GetComponent<AudioSource>().Play();
         potionPanel.SetActive(false);
         victoryLevel.text = gameData.Level.ToString();
         victoryPanel.SetActive(true);
@@ -69,6 +79,9 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+        gameObject.GetComponent<AudioSource>().Stop();
+        gameObject.GetComponent<AudioSource>().clip = gameOverClip;
+        gameObject.GetComponent<AudioSource>().Play();
         potionPanel.SetActive(false);
         scorePanel.SetActive(false);
         gameOverLevel.text = gameData.Level.ToString();

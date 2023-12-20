@@ -27,6 +27,7 @@ public class PotionBoard : MonoBehaviour
     List<Potion> potionsToRemove = new();
 
     public ParticleSystem matchParticlePrefab;
+    public AudioClip matchClip;
 
     //layoutArray
     public ArrayLayout arrayLayout;
@@ -46,35 +47,37 @@ public class PotionBoard : MonoBehaviour
 
     void Update()
     {
-
-        if (Input.touchCount > 0 || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+        if (!isProcessingMove)
         {
-            if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
+            if (Input.touchCount > 0 || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
             {
-                if (isProcessingMove) return;
-                Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-                if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
+                if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
                 {
-                    Potion potion = hit.collider.gameObject.GetComponent<Potion>();
-                    selectedPotion = potion;
-                }
-            }
-
-            if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) || Input.GetMouseButtonUp(0))
-            {
-                if (isProcessingMove) return;
-                Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
-                RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-                if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
-                {
-                    Potion potion = hit.collider.gameObject.GetComponent<Potion>();
-                    if (potion != selectedPotion)
+                    if (isProcessingMove) return;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
+                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+                    if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
                     {
-                        SwapPotion(potion, selectedPotion);
+                        Potion potion = hit.collider.gameObject.GetComponent<Potion>();
+                        selectedPotion = potion;
                     }
                 }
-                selectedPotion = null;
+
+                if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) || Input.GetMouseButtonUp(0))
+                {
+                    if (isProcessingMove) return;
+                    Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
+                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
+                    if (hit.collider != null && hit.collider.GetComponent<Potion>() != null)
+                    {
+                        Potion potion = hit.collider.gameObject.GetComponent<Potion>();
+                        if (potion != selectedPotion)
+                        {
+                            SwapPotion(potion, selectedPotion);
+                        }
+                    }
+                    selectedPotion = null;
+                }
             }
         }
     }
@@ -175,6 +178,7 @@ public class PotionBoard : MonoBehaviour
 
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
     {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
         foreach (Potion potion in potionsToRemove)
         {
             potion.isMatched = false;
