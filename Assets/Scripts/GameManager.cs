@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
+    public GameObject settingsPanel;
+    public GameObject settingsButton;
     public GameObject scorePanel;
     public GameObject potionPanel;
     public GameObject victoryPanel;
@@ -40,9 +43,31 @@ public class GameManager : MonoBehaviour
         remainingMoves = startingMoves; // every level has the same number of moves
         levelScore = 0;
         instance = this;
-        // get a random element from the levelMusic array
-        gameObject.GetComponent<AudioSource>().clip = levelMusic[UnityEngine.Random.Range(0, levelMusic.Length)];
-        gameObject.GetComponent<AudioSource>().Play();
+        foreach (Toggle t in settingsPanel.GetComponentsInChildren<Toggle>())
+        {
+            if (t.name == "MusicToggle") t.SetIsOnWithoutNotify(gameData.music);
+            if (t.name == "SoundToggle") t.SetIsOnWithoutNotify(gameData.sound);
+        }
+        PlayMusic();
+    }
+
+    private void PlayMusic()
+    {
+        if (gameData.music)
+        {
+            gameObject.GetComponent<AudioSource>().clip = levelMusic[UnityEngine.Random.Range(0, levelMusic.Length)];
+            gameObject.GetComponent<AudioSource>().Play();
+        }
+    }
+
+    private void PlaySound(AudioClip clip)
+    {
+        if (gameObject.GetComponent<AudioSource>().isPlaying) gameObject.GetComponent<AudioSource>().Stop();
+        if (gameData.sound)
+        {
+            gameObject.GetComponent<AudioSource>().clip = clip;
+            gameObject.GetComponent<AudioSource>().Play();
+        }
     }
 
     void Update()
@@ -68,9 +93,7 @@ public class GameManager : MonoBehaviour
 
     public void WinLevel()
     {
-        gameObject.GetComponent<AudioSource>().Stop();
-        gameObject.GetComponent<AudioSource>().clip = levelWinClip;
-        gameObject.GetComponent<AudioSource>().Play();
+        PlaySound(levelWinClip);
         potionPanel.SetActive(false);
         victoryLevel.text = gameData.Level.ToString();
         victoryPanel.SetActive(true);
@@ -79,9 +102,7 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        gameObject.GetComponent<AudioSource>().Stop();
-        gameObject.GetComponent<AudioSource>().clip = gameOverClip;
-        gameObject.GetComponent<AudioSource>().Play();
+        PlaySound(gameOverClip);
         potionPanel.SetActive(false);
         scorePanel.SetActive(false);
         gameOverLevel.text = gameData.Level.ToString();
@@ -105,6 +126,33 @@ public class GameManager : MonoBehaviour
     public void RestartButtonAction()
     {
         SceneManager.LoadScene(0);
+    }
+
+    public void SettingsButtonAction()
+    {
+        settingsPanel.SetActive(true);
+        potionPanel.SetActive(false);
+        settingsButton.SetActive(false);
+    }
+
+    public void SettingsCloseButtonAction()
+    {
+        settingsPanel.SetActive(false);
+        potionPanel.SetActive(true);
+        settingsButton.SetActive(true);
+    }
+
+    public void ToggleMusicAction()
+    {
+        gameData.ToggleMusic();
+        gameObject.GetComponent<AudioSource>().enabled = gameData.music;
+        if (gameData.music) PlayMusic();
+    }
+
+    public void ToggleSoundAction()
+    {
+        gameData.ToggleSound();
+        potionPanel.GetComponent<AudioSource>().enabled = gameData.sound;
     }
 
     // PlayerPrefs:

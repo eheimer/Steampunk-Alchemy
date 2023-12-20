@@ -44,6 +44,18 @@ public class GameData
         private set { PlayerPrefs.SetInt("bestLevel", value); }
     }
 
+    public bool music
+    {
+        get { return PlayerPrefs.GetInt("music", 1) == 1; }
+        private set { PlayerPrefs.SetInt("music", value ? 1 : 0); }
+    }
+
+    public bool sound
+    {
+        get { return PlayerPrefs.GetInt("sound", 1) == 1; }
+        private set { PlayerPrefs.SetInt("sound", value ? 1 : 0); }
+    }
+
     public void NextLevel(int goalAdd, int levelScore)
     {
         Level++;
@@ -65,5 +77,15 @@ public class GameData
         Level = 1;
         Goal = startingGoal;
         Score = 0;
+    }
+
+    public void ToggleMusic()
+    {
+        music = !music;
+    }
+
+    public void ToggleSound()
+    {
+        sound = !sound;
     }
 }

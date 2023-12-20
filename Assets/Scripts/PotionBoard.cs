@@ -178,7 +178,10 @@ public class PotionBoard : MonoBehaviour
 
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
     {
-        gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
+        if (GameManager.instance.gameData.sound)
+        {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
+        }
         foreach (Potion potion in potionsToRemove)
         {
             potion.isMatched = false;
