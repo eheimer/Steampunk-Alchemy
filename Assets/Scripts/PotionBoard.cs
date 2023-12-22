@@ -196,6 +196,10 @@ public class PotionBoard : MonoBehaviour
         {
             StartCoroutine(ProcessTurnOnMatchedBoard(false));
         }
+        else
+        {
+            GameManager.instance.CheckGameOver();
+        }
     }
 
     #region Cascading Potions
@@ -404,6 +408,7 @@ public class PotionBoard : MonoBehaviour
         return Mathf.Abs(current.xIndex - target.xIndex) + Mathf.Abs(current.yIndex - target.yIndex) == 1;
     }
 
+    // this happens only once per turn.  If the swap results in a match, we process the matches.  If not, we swap back.
     private IEnumerator ProcessMatches(Potion current, Potion target)
     {
         yield return new WaitForSeconds(0.2f);

@@ -88,6 +88,10 @@ public class GameManager : MonoBehaviour
             remainingMoves--;
         }
         if (remainingGoal <= 0) WinLevel();
+    }
+
+    public void CheckGameOver()
+    {
         if (remainingMoves <= 0) GameOver();
     }
 
