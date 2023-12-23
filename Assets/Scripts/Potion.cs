@@ -11,6 +11,8 @@ public class Potion : MonoBehaviour
     private Vector2 currentPos;
     private Vector2 targetPos;
     public bool isMoving = false;
+    public Sprite mainImage;
+    public Sprite altImage;
 
     public void SetIndices(int x, int y)
     {
@@ -46,5 +48,7 @@ public enum PotionType
     Blue,
     Purple,
     Green,
-    White
+    White,
+    Yellow,
+    Pink
 }

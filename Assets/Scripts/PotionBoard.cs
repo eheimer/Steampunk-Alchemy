@@ -185,6 +185,10 @@ public class PotionBoard : MonoBehaviour
         foreach (Potion potion in potionsToRemove)
         {
             potion.isMatched = false;
+            if (potion.altImage != null)
+            {
+                potion.GetComponent<SpriteRenderer>().sprite = potion.altImage;
+            }
             Instantiate(matchParticlePrefab, potion.transform.position, Quaternion.identity);
         }
         yield return new WaitForSeconds(0.5f);

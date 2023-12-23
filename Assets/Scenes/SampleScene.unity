@@ -4776,15 +4776,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 6
-  height: 12
+  height: 8
   spacingX: 0
   spacingY: 0
   potionPrefabs:
-  - {fileID: 2095312506148469160, guid: d09da3df3d13bb54d843f316914ad823, type: 3}
-  - {fileID: 8474885647443195135, guid: e90eaebfcb19392c2a3081901ee7dc2a, type: 3}
-  - {fileID: 4992188052228557714, guid: 394907db363458922a5ebb35fa050d86, type: 3}
-  - {fileID: 6094600920566454453, guid: c5f77703a90972cebb927119f8b73de1, type: 3}
-  - {fileID: 1404868669237538645, guid: 0700bbecd268d4348883e3a94219038f, type: 3}
+  - {fileID: 8646432583033584398, guid: 3e899ce2f223b7702984a92af22b1270, type: 3}
+  - {fileID: 834238825102970209, guid: 0e7b3f8ec4d8af346b725ee7f38800b6, type: 3}
+  - {fileID: 8692481518903853481, guid: cc69bbbcdce75bcd38063f1453195629, type: 3}
+  - {fileID: 6675039610737423564, guid: 45397b5bb9922dd85aeac18f7b86b7ae, type: 3}
+  - {fileID: 8681215962584564686, guid: 4f593846a74d7cd14bb81d9438643a30, type: 3}
   potionBoardGO: {fileID: 2050507463}
   potionsToDestroy: []
   potionParent: {fileID: 843035998}
