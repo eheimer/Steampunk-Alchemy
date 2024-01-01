@@ -19,6 +19,8 @@ public class PotionBoard : MonoBehaviour
     public List<GameObject> potionsToDestroy = new();
     public GameObject potionParent;
 
+    public GameScene gameScene;
+
     [SerializeField]
     private Potion selectedPotion;
     [SerializeField]
@@ -192,7 +194,7 @@ public class PotionBoard : MonoBehaviour
             Instantiate(matchParticlePrefab, potion.transform.position, Quaternion.identity);
         }
 
-        GameManager.instance.ProcessTurn(potionsToRemove.Count, subtractMoves);
+        gameScene.ProcessTurn(potionsToRemove.Count, subtractMoves);
         yield return new WaitForSeconds(0.5f);
 
         RemoveAndRefill(potionsToRemove);
@@ -205,7 +207,7 @@ public class PotionBoard : MonoBehaviour
         }
         else
         {
-            GameManager.instance.CheckGameOver();
+            gameScene.CheckGameOver();
         }
     }
 
