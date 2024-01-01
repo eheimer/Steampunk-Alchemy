@@ -191,11 +191,14 @@ public class PotionBoard : MonoBehaviour
             }
             Instantiate(matchParticlePrefab, potion.transform.position, Quaternion.identity);
         }
+
+        GameManager.instance.ProcessTurn(potionsToRemove.Count, subtractMoves);
         yield return new WaitForSeconds(0.5f);
 
         RemoveAndRefill(potionsToRemove);
-        GameManager.instance.ProcessTurn(potionsToRemove.Count, subtractMoves);
+
         yield return new WaitForSeconds(0.4f);
+
         if (CheckBoard())
         {
             StartCoroutine(ProcessTurnOnMatchedBoard(false));

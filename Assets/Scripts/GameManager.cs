@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public GameObject potionPanel;
     public GameObject victoryPanel;
     public GameObject gameOverPanel;
+    public GameObject startPanel;
+    public GameObject scoreText;
     public int startingGoal; // when a new game starts, this is the goal
     public int startingMoves; // number of moves per level
     public int remainingMoves; // number of moves remaining for current level
@@ -33,20 +35,32 @@ public class GameManager : MonoBehaviour
     public GameData gameData;
 
     public AudioClip[] levelMusic;
+    public AudioClip startMusic;
+
     public AudioClip levelWinClip;
     public AudioClip gameOverClip;
 
     private void Awake()
     {
         gameData = new GameData(startingGoal);
-        remainingGoal = gameData.Goal;
-        remainingMoves = startingMoves; // every level has the same number of moves
-        levelScore = 0;
-        instance = this;
-        foreach (Toggle t in settingsPanel.GetComponentsInChildren<Toggle>())
+        if (gameData.Level == 0)
         {
-            if (t.name == "MusicToggle") t.SetIsOnWithoutNotify(gameData.music);
-            if (t.name == "SoundToggle") t.SetIsOnWithoutNotify(gameData.sound);
+            potionPanel.SetActive(false);
+            startPanel.SetActive(true);
+        }
+        else
+        {
+            startPanel.SetActive(false);
+            potionPanel.SetActive(true);
+            remainingGoal = gameData.Goal;
+            remainingMoves = startingMoves; // every level has the same number of moves
+            levelScore = 0;
+            instance = this;
+            foreach (Toggle t in settingsPanel.GetComponentsInChildren<Toggle>())
+            {
+                if (t.name == "MusicToggle") t.SetIsOnWithoutNotify(gameData.music);
+                if (t.name == "SoundToggle") t.SetIsOnWithoutNotify(gameData.sound);
+            }
         }
         PlayMusic();
     }
@@ -55,7 +69,14 @@ public class GameManager : MonoBehaviour
     {
         if (gameData.music)
         {
-            gameObject.GetComponent<AudioSource>().clip = levelMusic[UnityEngine.Random.Range(0, levelMusic.Length)];
+            if (gameData.Level == 0)
+            {
+                gameObject.GetComponent<AudioSource>().clip = startMusic;
+            }
+            else
+            {
+                gameObject.GetComponent<AudioSource>().clip = levelMusic[UnityEngine.Random.Range(0, levelMusic.Length)];
+            }
             gameObject.GetComponent<AudioSource>().Play();
         }
     }
@@ -82,6 +103,13 @@ public class GameManager : MonoBehaviour
     {
         levelScore += pointsToGain;
         remainingGoal -= pointsToGain;
+
+        if (pointsToGain > 0)
+        {
+            // play the swell animation on the score text one time
+            // load the BumpScore transition in the animator
+            scoreText.GetComponent<Animator>().SetTrigger("BumpScore");
+        }
 
         if (subtractMoves)
         {
@@ -127,8 +155,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    public void PlayButtonAction()
+    {
+        gameData.Restart();
+        gameData.NextLevel(0, 0);
+        SceneManager.LoadScene(0);
+    }
+
     public void RestartButtonAction()
     {
+        gameData.Restart();
         SceneManager.LoadScene(0);
     }
 
@@ -158,15 +194,4 @@ public class GameManager : MonoBehaviour
         gameData.ToggleSound();
         potionPanel.GetComponent<AudioSource>().enabled = gameData.sound;
     }
-
-    // PlayerPrefs:
-    //   goal: int - score needed to win the current level
-    //     (default: startingGoal)
-    //     this gets increased by a random amt with each level
-    //   score: int - running score
-    //     this gets increased by the number of points scored each level
-    //   level: int - current level
-    //     (default: 1)
-    //   bestScore: int - best score
-    //   bestLevel: int - best level
 }

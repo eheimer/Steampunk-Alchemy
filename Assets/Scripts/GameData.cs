@@ -63,6 +63,13 @@ public class GameData
         Score += levelScore;
     }
 
+    public void Restart()
+    {
+        Level = 0;
+        Goal = startingGoal;
+        Score = 0;
+    }
+
     public void GameOver(int levelScore)
     {
         Score += levelScore;
