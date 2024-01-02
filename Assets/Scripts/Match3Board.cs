@@ -188,7 +188,7 @@ public class Match3Board : MonoBehaviour
 
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
     {
-        if (GameManager.instance.gameData.sound)
+        if (GameManager.instance.gameData.Sound)
         {
             gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
         }

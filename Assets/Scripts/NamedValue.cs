@@ -5,33 +5,35 @@ using UnityEngine;
 
 public class NamedValue : MonoBehaviour
 {
-    [SerializeField] string title;
-    [SerializeField] int value;
-
     [SerializeField] TMP_Text titleText;
     [SerializeField] TMP_Text valueText;
 
     [SerializeField] bool showTitle = true;
 
-    private void Update()
+    private void Start()
     {
-        titleText.enabled = showTitle;
-        if (showTitle)
+        titleText.gameObject.SetActive(showTitle);
+    }
+
+    private string _title;
+    public string Title
+    {
+        get { return _title; }
+        set
         {
-            titleText.text = title.ToUpper();
+            _title = value;
+            titleText.text = value.ToUpper();
         }
-        valueText.text = value.ToString();
     }
 
-    public void SetTitle(string title)
+    private int _value;
+    public int Value
     {
-        this.title = title;
-        titleText.text = title;
-    }
-
-    public void SetValue(int value)
-    {
-        this.value = value;
-        valueText.text = value.ToString();
+        get { return _value; }
+        set
+        {
+            _value = value;
+            valueText.text = value.ToString();
+        }
     }
 }

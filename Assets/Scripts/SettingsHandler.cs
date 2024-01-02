@@ -14,8 +14,8 @@ public class SettingsHandler : MonoBehaviour
     public void SettingsButtonAction()
     {
         // set up the panel so that it shows the current settings
-        musicToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.music);
-        soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.sound);
+        musicToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Music);
+        soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Sound);
         button.SetActive(false);
         panel.SetActive(true);
     }
@@ -35,17 +35,11 @@ public class SettingsHandler : MonoBehaviour
     public void ToggleMusicAction()
     {
         GameManager.instance.gameData.ToggleMusic();
-        GameManager.instance.GetComponent<AudioSource>().enabled = GameManager.instance.gameData.music;
-        if (GameManager.instance.gameData.music)
-        {
-            GameManager.instance.currentScene.PlayMusic();
-        }
     }
 
     public void ToggleSoundAction()
     {
         GameManager.instance.gameData.ToggleSound();
-        GameManager.instance.currentScene.SetSound(GameManager.instance.gameData.sound);
     }
 
 

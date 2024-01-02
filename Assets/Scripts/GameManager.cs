@@ -22,6 +22,11 @@ public class GameManager : MonoBehaviour
     public int startingGoal; // when a new game starts, this is the goal
     public int startingMoves; // number of moves per level
 
+    [SerializeField]
+    AudioSource musicPlayer;
+    [SerializeField]
+    AudioSource soundEffectsPlayer;
+
     public GameData gameData;
 
     private void Awake()
@@ -36,18 +41,58 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
+        musicPlayer.enabled = gameData.Music;
+        soundEffectsPlayer.enabled = gameData.Sound;
+
+        gameData.onValueChanged += (string key, int value) =>
+        {
+            if (key == "Music")
+            {
+                musicPlayer.enabled = value == 1;
+                PlayMusic();
+            }
+            if (key == "Sound")
+            {
+                soundEffectsPlayer.enabled = value == 1;
+            }
+        };
+
         if (gameData.GameInProgress)
         {
             SceneManager.LoadScene(SceneName.Game.name());
         }
     }
 
+    /// <summary>
+    /// Play the music if it is not already playing.
+    /// </summary>
+    public void PlayMusic()
+    {
+        if (musicPlayer.enabled && !musicPlayer.isPlaying && musicPlayer.clip != null)
+        {
+            musicPlayer.Play();
+        }
+    }
+
+    /// <summary>
+    /// Assign a new clip and start playing it
+    /// </summary>
+    /// <param name="clip"></param>
     public void PlayMusic(AudioClip clip)
     {
-        if (gameData.music)
+        if (musicPlayer.enabled && musicPlayer.isPlaying)
         {
-            gameObject.GetComponent<AudioSource>().clip = clip;
-            gameObject.GetComponent<AudioSource>().Play();
+            musicPlayer.Stop();
+        }
+        musicPlayer.clip = clip;
+        PlayMusic();
+    }
+
+    public void PlaySoundEffect(AudioClip clip)
+    {
+        if (soundEffectsPlayer.enabled)
+        {
+            soundEffectsPlayer.PlayOneShot(clip);
         }
     }
 
@@ -60,6 +105,4 @@ public class GameManager : MonoBehaviour
         }
         Destroy(gameObject);
     }
-
-
 }

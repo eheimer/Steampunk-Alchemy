@@ -6,67 +6,91 @@ public class GameData
 {
     private int startingGoal; // the goal for level 1
     private int startingMoves; // the number of moves for level 1
+
+    public delegate void OnValueChanged(string key, int value);
+    public event OnValueChanged onValueChanged;
+
     public GameData(int startingGoal, int startingMoves)
     {
         this.startingGoal = startingGoal;
         this.startingMoves = startingMoves;
     }
 
+    private int GetInt(string key, int defaultValue)
+    {
+        return PlayerPrefs.GetInt(key, defaultValue);
+    }
+    private void SetInt(string key, int value)
+    {
+        PlayerPrefs.SetInt(key, value);
+        onValueChanged?.Invoke(key, value);
+    }
+
     public int GameScore
     {
-        get { return PlayerPrefs.GetInt("gameScore", 0); }
-        private set { PlayerPrefs.SetInt("gameScore", value); }
+        get { return GetInt("GameScore", 0); }
+        private set { SetInt("GameScore", value); }
     }
     public int LevelScore
     {
-        get { return PlayerPrefs.GetInt("levelScore", 0); }
-        private set { PlayerPrefs.SetInt("levelScore", value); }
+        get { return GetInt("LevelScore", 0); }
+        private set
+        {
+            SetInt("LevelScore", value);
+            LevelGoalRemaining = Goal - value;
+        }
     }
     public int LevelGoalRemaining
     {
-        get { return Mathf.Max(Goal - LevelScore, 0); }
+        get { return Mathf.Max(GetInt("LevelGoalRemaining", 0), 0); }
+        private set { SetInt("LevelGoalRemaining", value); }
+
     }
     public int LevelMovesRemaining
     {
-        get { return PlayerPrefs.GetInt("levelMovesRemaining", 0); }
-        private set { PlayerPrefs.SetInt("levelMovesRemaining", value); }
+        get { return GetInt("LevelMovesRemaining", 0); }
+        private set { SetInt("LevelMovesRemaining", value); }
     }
     // NOTE: If a game is not in progress, GameData may contain the values from the previous game.
     public bool GameInProgress
     {
-        get { return PlayerPrefs.GetInt("gameInProgress", 0) == 1; }
-        private set { PlayerPrefs.SetInt("gameInProgress", value ? 1 : 0); }
+        get { return GetInt("GameInProgress", 0) == 1; }
+        private set { SetInt("GameInProgress", value ? 1 : 0); }
     }
     public int Level
     {
-        get { return PlayerPrefs.GetInt("level", 1); }
-        private set { PlayerPrefs.SetInt("level", value); }
+        get { return GetInt("Level", 1); }
+        private set { SetInt("Level", value); }
     }
     public int Goal
     {
-        get { return PlayerPrefs.GetInt("goal", startingGoal); }
-        private set { PlayerPrefs.SetInt("goal", value); }
+        get { return GetInt("Goal", startingGoal); }
+        private set
+        {
+            SetInt("Goal", value);
+            LevelGoalRemaining = value - LevelScore;
+        }
     }
-    public int bestScore
+    public int BestScore
     {
-        get { return PlayerPrefs.GetInt("bestScore", 0); }
-        private set { PlayerPrefs.SetInt("bestScore", value); }
+        get { return GetInt("BestScore", 0); }
+        private set { SetInt("BestScore", value); }
     }
-    public int bestLevel
+    public int BestLevel
     {
-        get { return PlayerPrefs.GetInt("bestLevel", 0); }
-        private set { PlayerPrefs.SetInt("bestLevel", value); }
+        get { return GetInt("BestLevel", 0); }
+        private set { SetInt("BestLevel", value); }
     }
-    public bool music
+    public bool Music
     {
-        get { return PlayerPrefs.GetInt("music", 1) == 1; }
-        private set { PlayerPrefs.SetInt("music", value ? 1 : 0); }
+        get { return GetInt("Music", 1) == 1; }
+        private set { SetInt("Music", value ? 1 : 0); }
     }
 
-    public bool sound
+    public bool Sound
     {
-        get { return PlayerPrefs.GetInt("sound", 1) == 1; }
-        private set { PlayerPrefs.SetInt("sound", value ? 1 : 0); }
+        get { return GetInt("Sound", 1) == 1; }
+        private set { SetInt("Sound", value ? 1 : 0); }
     }
 
     public void AddScore(int score, bool moves = true)
@@ -97,23 +121,23 @@ public class GameData
     public void GameOver()
     {
         GameInProgress = false;
-        if (bestScore < GameScore)
+        if (BestScore < GameScore)
         {
-            bestScore = GameScore;
+            BestScore = GameScore;
         }
-        if (bestLevel < Level)
+        if (BestLevel < Level)
         {
-            bestLevel = Level;
+            BestLevel = Level;
         }
     }
 
     public void ToggleMusic()
     {
-        music = !music;
+        Music = !Music;
     }
 
     public void ToggleSound()
     {
-        sound = !sound;
+        Sound = !Sound;
     }
 }
