@@ -66,7 +66,11 @@ public class Match3Board : MonoBehaviour
                         Match3Item item = hit.collider.gameObject.GetComponent<Match3Item>();
                         if (item != selectedItem)
                         {
-                            SwapItem(item, selectedItem);
+                            if (IsAdjacent(item, selectedItem))
+                            {
+                                StartProcessingMove();
+                                SwapItem(item, selectedItem);
+                            }
                         }
                     }
                     selectedItem = null;
@@ -97,12 +101,8 @@ public class Match3Board : MonoBehaviour
         }
         while (CheckBoard())
         {
-            Debug.Log("Board has matches, adjusting...");
             ReplaceMatchedItems();
         }
-
-        Debug.Log("Board has no matches.  Ready to play.");
-
     }
 
     private void DestroyItems()
@@ -118,7 +118,6 @@ public class Match3Board : MonoBehaviour
 
     public bool CheckBoard()
     {
-        Debug.Log("Checking Board");
         bool hasMatched = false;
 
         itemsToRemove.Clear();
@@ -199,7 +198,30 @@ public class Match3Board : MonoBehaviour
         else
         {
             gameScene.CheckGameOver();
+            EndProcessingMove();
         }
+    }
+
+    private void StartProcessingMove()
+    {
+        if (isProcessingMove)
+        {
+            Debug.LogError("Attempted to start a new move while a move is already processing.");
+            return;
+        }
+
+        isProcessingMove = true;
+    }
+
+    private void EndProcessingMove()
+    {
+        if (!isProcessingMove)
+        {
+            Debug.LogError("Attempted to end a move, but no move is currently processing.");
+            return;
+        }
+
+        isProcessingMove = false;
     }
 
     #region Cascading Matches
@@ -368,14 +390,8 @@ public class Match3Board : MonoBehaviour
 
     private void SwapItem(Match3Item current, Match3Item target)
     {
-        if (!IsAdjacent(current, target))
-        {
-            return;
-        }
-
         DoSwap(current, target);
 
-        isProcessingMove = true;
         StartCoroutine(ProcessMatches(current, target));
     }
 
@@ -412,9 +428,8 @@ public class Match3Board : MonoBehaviour
         else
         {
             DoSwap(current, target);
+            EndProcessingMove();
         }
-
-        isProcessingMove = false;
     }
 
     #endregion

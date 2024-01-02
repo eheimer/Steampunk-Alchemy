@@ -117,7 +117,7 @@ namespace Spinach
             this.gridArray = new TGridObject[width, height];
             this.usableArray = GetDefaultUsableArray(width, height);
 
-            var debug = true;
+            var debug = false;
             if (debug)
             {
                 TextMesh[,] debugTextArray = new TextMesh[width, height];

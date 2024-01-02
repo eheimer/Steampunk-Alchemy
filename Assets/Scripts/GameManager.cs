@@ -44,8 +44,6 @@ public class GameManager : MonoBehaviour
 
     public void PlayMusic(AudioClip clip)
     {
-        Debug.Log("PlayMusic, clip = " + clip.name);
-        Debug.Log("enabled: " + gameData.music + ", " + gameObject.GetComponent<AudioSource>().enabled);
         if (gameData.music)
         {
             gameObject.GetComponent<AudioSource>().clip = clip;
