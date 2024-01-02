@@ -38,6 +38,8 @@ public class Match3Board : MonoBehaviour
         InitializeBoard();
     }
 
+    private Vector2 touchStartPos, touchEndPos = default;
+
     void Update()
     {
         if (!isProcessingMove)
@@ -46,32 +48,48 @@ public class Match3Board : MonoBehaviour
             {
                 if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
                 {
-                    if (isProcessingMove) return;
                     Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
                     RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
                     if (hit.collider != null && hit.collider.GetComponent<Match3Item>() != null)
                     {
                         Match3Item item = hit.collider.gameObject.GetComponent<Match3Item>();
                         selectedItem = item;
+                        touchStartPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
                     }
                 }
-
                 if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) || Input.GetMouseButtonUp(0))
                 {
-                    if (isProcessingMove) return;
-                    Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
-                    RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-                    if (hit.collider != null && hit.collider.GetComponent<Match3Item>() != null)
+                    if (touchStartPos == default || selectedItem == default) return;
+                    touchEndPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
+                    Vector2 swipeDirection = (touchEndPos - touchStartPos).normalized;
+                    touchStartPos = touchEndPos = default;
+                    Match3Item swapItem = null;
+                    if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
                     {
-                        Match3Item item = hit.collider.gameObject.GetComponent<Match3Item>();
-                        if (item != selectedItem)
+                        if (swipeDirection.x > 0)
                         {
-                            if (IsAdjacent(item, selectedItem))
-                            {
-                                StartProcessingMove();
-                                SwapItem(item, selectedItem);
-                            }
+                            swapItem = gameBoard.GetValue(selectedItem.xIndex + 1, selectedItem.yIndex);
                         }
+                        else
+                        {
+                            swapItem = gameBoard.GetValue(selectedItem.xIndex - 1, selectedItem.yIndex);
+                        }
+                    }
+                    else
+                    {
+                        if (swipeDirection.y > 0)
+                        {
+                            swapItem = gameBoard.GetValue(selectedItem.xIndex, selectedItem.yIndex + 1);
+                        }
+                        else
+                        {
+                            swapItem = gameBoard.GetValue(selectedItem.xIndex, selectedItem.yIndex - 1);
+                        }
+                    }
+                    if (swapItem != null)
+                    {
+                        StartProcessingMove();
+                        SwapItem(swapItem, selectedItem);
                     }
                     selectedItem = null;
                 }
