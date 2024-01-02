@@ -2,14 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Potion : MonoBehaviour
+public class Match3Item : MonoBehaviour
 {
-    public PotionType potionType;
+    public Match3ItemType itemType;
     public int xIndex;
     public int yIndex;
     public bool isMatched = false;
-    private Vector2 currentPos;
-    private Vector2 targetPos;
     public bool isMoving = false;
     public Sprite mainImage;
     public Sprite altImage;
@@ -42,7 +40,7 @@ public class Potion : MonoBehaviour
     }
 }
 
-public enum PotionType
+public enum Match3ItemType
 {
     Red,
     Blue,

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 9025981359390849084}
   - component: {fileID: 4732662656475000212}
   m_Layer: 0
-  m_Name: TessaPotion
+  m_Name: TessaGridItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -95,10 +95,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8692481518903853481}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 786021b35bbf03d87992f8383edb275d, type: 3}
+  m_Script: {fileID: 11500000, guid: de2c122b394461c5a877b2bc54e15922, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  potionType: 5
+  itemType: 5
   xIndex: 0
   yIndex: 0
   isMatched: 0

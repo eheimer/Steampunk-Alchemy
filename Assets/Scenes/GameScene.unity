@@ -1187,7 +1187,7 @@ GameObject:
   - component: {fileID: 843036001}
   - component: {fileID: 843036000}
   m_Layer: 5
-  m_Name: potions
+  m_Name: items
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2637,7 +2637,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 858f54c8ca3d9cd408b6a8d938724ef7, type: 3}
   levelWinClip: {fileID: 8300000, guid: 01a66eabc0d385748837b2265bc21dc5, type: 3}
   gameOverClip: {fileID: 8300000, guid: fa338e15a299e53448dcbbba1ebed068, type: 3}
-  potionPanel: {fileID: 2050507463}
+  gameBoardPanel: {fileID: 2050507463}
   victoryPanel: {fileID: 577543148}
   gameOverPanel: {fileID: 89965814}
   victoryLevel: {fileID: 1748890226}
@@ -3308,7 +3308,7 @@ GameObject:
   - component: {fileID: 2050507468}
   - component: {fileID: 2050507469}
   m_Layer: 5
-  m_Name: PotionBoard
+  m_Name: GameBoard
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3356,19 +3356,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 6
   height: 8
-  potionPrefabs:
+  itemPrefabs:
+  - {fileID: 8681215962584564686, guid: 4f593846a74d7cd14bb81d9438643a30, type: 3}
   - {fileID: 8646432583033584398, guid: 3e899ce2f223b7702984a92af22b1270, type: 3}
   - {fileID: 834238825102970209, guid: 0e7b3f8ec4d8af346b725ee7f38800b6, type: 3}
-  - {fileID: 8692481518903853481, guid: cc69bbbcdce75bcd38063f1453195629, type: 3}
   - {fileID: 6675039610737423564, guid: 45397b5bb9922dd85aeac18f7b86b7ae, type: 3}
-  - {fileID: 8681215962584564686, guid: 4f593846a74d7cd14bb81d9438643a30, type: 3}
-  potionBoardGO: {fileID: 2050507463}
-  potionsToDestroy: []
-  potionParent: {fileID: 843035998}
+  - {fileID: 8692481518903853481, guid: cc69bbbcdce75bcd38063f1453195629, type: 3}
+  gameBoardGO: {fileID: 2050507463}
+  itemsToDestroy: []
+  itemParent: {fileID: 843035998}
   gameScene: {fileID: 1700683227}
-  selectedPotion: {fileID: 0}
+  selectedItem: {fileID: 0}
   isProcessingMove: 0
-  potionsToRemove: []
+  itemsToRemove: []
   matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
   matchClip: {fileID: 8300000, guid: 6fb4252918c27f44e833a7bdd3ac8da5, type: 3}
   arrayLayout:

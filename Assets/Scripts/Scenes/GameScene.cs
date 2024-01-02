@@ -14,7 +14,7 @@ public class GameScene : Scene
     public AudioClip[] levelMusic;
     public AudioClip levelWinClip;
     public AudioClip gameOverClip;
-    public GameObject potionPanel;
+    public GameObject gameBoardPanel;
     public GameObject victoryPanel;
     public GameObject gameOverPanel;
     public TMP_Text victoryLevel;
@@ -85,7 +85,7 @@ public class GameScene : Scene
     public void WinLevel()
     {
         PlaySound(levelWinClip);
-        potionPanel.SetActive(false);
+        gameBoardPanel.SetActive(false);
         victoryLevel.text = GameManager.instance.gameData.Level.ToString();
         victoryPanel.SetActive(true);
         return;
@@ -94,7 +94,7 @@ public class GameScene : Scene
     public void GameOver()
     {
         PlaySound(gameOverClip);
-        potionPanel.SetActive(false);
+        gameBoardPanel.SetActive(false);
         gameOverLevel.text = GameManager.instance.gameData.Level.ToString();
         gameOverScore.text = GameManager.instance.gameData.GameScore.ToString();
         gameOverBestLevel.text = GameManager.instance.gameData.bestLevel.ToString();

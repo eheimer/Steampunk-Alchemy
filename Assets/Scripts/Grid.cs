@@ -28,6 +28,7 @@ namespace Spinach
         float cellSize;
         Vector3 originPosition;
         TGridObject[,] gridArray;
+        bool[,] usableArray;
 
         public int GetWidth() { return width; }
         public int GetHeight() { return height; }
@@ -36,6 +37,7 @@ namespace Spinach
         {
             public int x;
             public int y;
+            public TGridObject value;
         }
 
         public event System.EventHandler<OnGridValueChangedEventArgs> OnGridValueChanged;
@@ -113,6 +115,7 @@ namespace Spinach
             this.cellSize = cellSize;
             this.originPosition = originPosition;
             this.gridArray = new TGridObject[width, height];
+            this.usableArray = GetDefaultUsableArray(width, height);
 
             var debug = true;
             if (debug)
@@ -136,6 +139,44 @@ namespace Spinach
                 //     if (debugTextArray[eventArgs.x, eventArgs.y] != null)
                 //     { debugTextArray[eventArgs.x, eventArgs.y].text = gridArray[eventArgs.x, eventArgs.y].ToString(); }
                 // };
+            }
+        }
+
+        private bool[,] GetDefaultUsableArray(int width, int height)
+        {
+            var usableArray = new bool[width, height];
+            for (int x = 0; x < width; x++)
+            {
+                for (int y = 0; y < height; y++)
+                {
+                    usableArray[x, y] = true;
+                }
+            }
+            return usableArray;
+        }
+
+        public bool IsUsable(int x, int y)
+        {
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                return usableArray[x, y];
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void SetUsable(bool[,] _usableArray)
+        {
+            this.usableArray = _usableArray;
+        }
+
+        public void SetUsable(int x, int y, bool _usable)
+        {
+            if (x >= 0 && y >= 0 && x < width && y < height)
+            {
+                usableArray[x, y] = _usable;
             }
         }
 
@@ -164,10 +205,10 @@ namespace Spinach
 
         public void SetValue(int x, int y, TGridObject value)
         {
-            if (x >= 0 && y >= 0 && x < width && y < height)
+            if (x >= 0 && y >= 0 && x < width && y < height && IsUsable(x, y))
             {
                 gridArray[x, y] = value;
-                OnGridValueChanged?.Invoke(this, new OnGridValueChangedEventArgs { x = x, y = y });
+                OnGridValueChanged?.Invoke(this, new OnGridValueChangedEventArgs { x = x, y = y, value = value });
             }
         }
 
