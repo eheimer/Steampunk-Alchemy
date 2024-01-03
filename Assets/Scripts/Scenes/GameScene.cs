@@ -96,6 +96,7 @@ public class GameScene : Scene
 
     public void WinLevel()
     {
+        GameManager.instance.StopMusic();
         GameManager.instance.PlaySoundEffect(levelWinClip);
         gameBoardPanel.SetActive(false);
         victoryLevel.text = GameManager.instance.gameData.Level.ToString();
@@ -105,6 +106,7 @@ public class GameScene : Scene
 
     public void GameOver()
     {
+        GameManager.instance.StopMusic();
         GameManager.instance.PlaySoundEffect(gameOverClip);
         gameBoardPanel.SetActive(false);
         gameOverLevel.text = GameManager.instance.gameData.Level.ToString();

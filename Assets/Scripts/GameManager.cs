@@ -82,10 +82,15 @@ public class GameManager : MonoBehaviour
     {
         if (musicPlayer.enabled && musicPlayer.isPlaying)
         {
-            musicPlayer.Stop();
+            StopMusic();
         }
         musicPlayer.clip = clip;
         PlayMusic();
+    }
+
+    public void StopMusic()
+    {
+        musicPlayer.Stop();
     }
 
     public void PlaySoundEffect(AudioClip clip)
