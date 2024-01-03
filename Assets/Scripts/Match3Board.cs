@@ -9,6 +9,8 @@ public class Match3Board : MonoBehaviour
     public Match3Item[] itemPrefabs;
     public Spinach.Grid<Match3Item> gameBoard;
     public GameObject gameBoardGO;
+
+    public GameObject backgroundPrefab;
     public List<GameObject> itemsToDestroy = new();
     public GameObject itemContainer;
 
@@ -103,6 +105,15 @@ public class Match3Board : MonoBehaviour
         {
             gameBoard = Spinach.Grid<Match3Item>.FitAndCenteredGrid(width, height);
             gameBoard.SetUsable(arrayLayout.ConvertToUsableArray());
+
+            // I'm finally starting to understand how Unity units work:
+            // the background sprite has been configured to have a border of .5 units on every side
+            // so the size needs to be the size of the grid +1 in each direction
+            // then the scale is set to the size of a cell
+            // we set the z position to 9.5 so that it's behind the items (which are at z = 9)
+            GameObject background = Instantiate(backgroundPrefab, new Vector3(0, 0, 9.5f), Quaternion.identity);
+            background.GetComponent<SpriteRenderer>().size = new Vector2((width + 1), (height + 1));
+            background.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
         }
         DestroyItems();
 
