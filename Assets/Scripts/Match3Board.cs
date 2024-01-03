@@ -6,11 +6,11 @@ public class Match3Board : MonoBehaviour
 {
     public int width = 6;
     public int height = 8;
-    public GameObject[] itemPrefabs;
+    public Match3Item[] itemPrefabs;
     public Spinach.Grid<Match3Item> gameBoard;
     public GameObject gameBoardGO;
     public List<GameObject> itemsToDestroy = new();
-    public GameObject itemParent;
+    public GameObject itemContainer;
 
     public GameScene gameScene;
 
@@ -199,7 +199,7 @@ public class Match3Board : MonoBehaviour
             {
                 item.GetComponent<SpriteRenderer>().sprite = item.altImage;
             }
-            Instantiate(matchParticlePrefab, new Vector3(item.transform.position.x, item.transform.position.y, 0), Quaternion.identity);
+            Instantiate(matchParticlePrefab, new Vector3(item.transform.position.x, item.transform.position.y, itemContainer.transform.position.z), Quaternion.identity);
         }
 
         gameScene.ProcessTurn(itemsToRemove.Count, subtractMoves);
@@ -288,14 +288,16 @@ public class Match3Board : MonoBehaviour
     private void SpawnItemAtTop(int x)
     {
         int randomIndex = Random.Range(0, itemPrefabs.Length);
-        GameObject newItem = Instantiate(itemPrefabs[randomIndex], gameBoard.GetCellCenter(x, height), Quaternion.identity);
+        Match3Item newItem = Instantiate(itemPrefabs[randomIndex], gameBoard.GetCellCenter(x, height), Quaternion.identity);
+
+        newItem.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
+
         int index = FindIndexOfLowestNull(x);
+        gameBoard.SetValue(x, index, newItem);
+        newItem.transform.SetParent(itemContainer.transform, false);
         Vector3 targetPosition = gameBoard.GetCellCenter(x, index);
-        newItem.transform.SetParent(itemParent.transform);
-        var item = newItem.GetComponent<Match3Item>();
-        item.SetIndices(x, index);
-        gameBoard.SetValue(x, index, item);
-        item.MoveToTarget(targetPosition);
+        newItem.SetIndices(x, index);
+        newItem.MoveToTarget(targetPosition);
     }
 
     private int FindIndexOfLowestNull(int x)

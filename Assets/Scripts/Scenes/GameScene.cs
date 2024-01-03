@@ -19,6 +19,7 @@ public class GameScene : Scene
     public TMP_Text gameOverBestLevel;
     public TMP_Text gameOverBestScore;
     public NamedValue scorePrefab;
+    public GameObject scoreboardContainer;
 
     private NamedValue[] scoreboard;
     public Spinach.Grid<NamedValue> grid;
@@ -31,7 +32,8 @@ public class GameScene : Scene
         scoreboard = new NamedValue[4];
         for (int x = 0; x < 4; x++)
         {
-            scoreboard[x] = Instantiate(scorePrefab, grid.GetWorldPosition(x, 0) + new Vector3(.75f, .75f), Quaternion.identity);
+            scoreboard[x] = Instantiate(scorePrefab, grid.GetWorldPosition(x, 0) + new Vector3(.75f, .75f, 0), Quaternion.identity);
+            scoreboard[x].transform.SetParent(scoreboardContainer.transform, false);
         }
         scoreboard[0].Title = "score";
         scoreboard[1].Title = "moves";

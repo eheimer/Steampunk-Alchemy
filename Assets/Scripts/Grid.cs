@@ -68,13 +68,13 @@ namespace Spinach
             switch (dockPosition)
             {
                 case DockPosition.Top:
-                    return new Vector3(-width * cellSize / 2f, Camera.main.orthographicSize - height * cellSize);
+                    return new Vector3(-width * cellSize / 2f, Camera.main.orthographicSize - height * cellSize, 0);
                 case DockPosition.Right:
-                    return new Vector3(Camera.main.orthographicSize * Camera.main.aspect - width * cellSize, -height * cellSize / 2f);
+                    return new Vector3(Camera.main.orthographicSize * Camera.main.aspect - width * cellSize, -height * cellSize / 2f, 0);
                 case DockPosition.Bottom:
-                    return new Vector3(-width * cellSize / 2f, -Camera.main.orthographicSize);
+                    return new Vector3(-width * cellSize / 2f, -Camera.main.orthographicSize, 0);
                 case DockPosition.Left:
-                    return new Vector3(-Camera.main.orthographicSize * Camera.main.aspect, -height * cellSize / 2f);
+                    return new Vector3(-Camera.main.orthographicSize * Camera.main.aspect, -height * cellSize / 2f, 0);
                 default:
                     return Vector3.zero;
             }
@@ -102,7 +102,7 @@ namespace Spinach
         /// <returns></returns>
         public static Grid<TGridObject> CenteredGrid(int width, int height, float cellSize)
         {
-            Vector3 originPosition = new Vector3(-width * cellSize / 2f, -height * cellSize / 2f);
+            Vector3 originPosition = new Vector3(-width * cellSize / 2f, -height * cellSize / 2f, 0);
             return new Grid<TGridObject>(width, height, cellSize, originPosition);
         }
 
@@ -182,12 +182,12 @@ namespace Spinach
 
         public Vector3 GetWorldPosition(int x, int y)
         {
-            return new Vector3(x, y) * cellSize + originPosition;
+            return new Vector3(x, y, 0) * cellSize + originPosition;
         }
 
         public Vector3 GetCellCenter(int x, int y)
         {
-            return GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f;
+            return GetWorldPosition(x, y) + new Vector3(cellSize, cellSize, 0) * .5f;
         }
 
         public void GetXY(Vector3 worldPosition, out int x, out int y)

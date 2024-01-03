@@ -18,20 +18,22 @@ public class Match3Item : MonoBehaviour
         yIndex = y;
     }
 
-    public void MoveToTarget(Vector2 targetPos)
+    public void MoveToTarget(Vector3 targetPos)
     {
         StartCoroutine(MoveCoroutine(targetPos));
     }
 
-    private IEnumerator MoveCoroutine(Vector2 targetPos)
+    private IEnumerator MoveCoroutine(Vector3 targetPos)
     {
         isMoving = true;
         float duration = 0.2f;
-        Vector2 startPos = transform.position;
+        Vector3 startPos = transform.position;
+        //make sure the target position is in the same plane as the start position
+        targetPos.z = startPos.z;
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
-            transform.position = Vector2.Lerp(startPos, targetPos, (elapsedTime / duration));
+            transform.position = Vector3.Lerp(startPos, targetPos, (elapsedTime / duration));
             elapsedTime += Time.deltaTime;
             yield return null;
         }
