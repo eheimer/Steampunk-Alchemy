@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,12 +19,15 @@ public class SettingsHandler : MonoBehaviour
         soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Sound);
         button.SetActive(false);
         panel.SetActive(true);
+        //disable swipes on the Match3Board while the settings panel is open
+        Match3Board.Instance.noInput = true;
     }
 
     public void SettingsCloseButtonAction()
     {
         button.SetActive(true);
         panel.SetActive(false);
+        Match3Board.Instance.noInput = false;
     }
 
     public void SettinsQuitButtonAction()

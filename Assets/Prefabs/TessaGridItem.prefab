@@ -105,6 +105,7 @@ MonoBehaviour:
   isMoving: 0
   mainImage: {fileID: 21300000, guid: b3b0f26c6a99bdddd98c4603fdfe92e7, type: 3}
   altImage: {fileID: 21300000, guid: 2f541e0c1e2e6f1c2a8f2c7d212a4a6e, type: 3}
+  matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
 --- !u!61 &4732662656475000212
 BoxCollider2D:
   m_ObjectHideFlags: 0

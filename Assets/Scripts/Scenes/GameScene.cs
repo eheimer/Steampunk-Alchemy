@@ -21,6 +21,8 @@ public class GameScene : Scene
     public NamedValue scorePrefab;
     public GameObject scoreboardContainer;
 
+    public bool settings;
+
     private NamedValue[] scoreboard;
     public Spinach.Grid<NamedValue> grid;
 
@@ -86,12 +88,12 @@ public class GameScene : Scene
             // load the BumpScore transition in the animator
             // pointsText.GetComponent<Animator>().SetTrigger("BumpScore");
         }
-        if (GameManager.instance.gameData.LevelGoalRemaining <= 0) WinLevel();
+        if (GameManager.instance.gameData.LevelGoalRemaining <= 0) Invoke("WinLevel", 0.5f);
     }
 
     public void CheckGameOver()
     {
-        if (GameManager.instance.gameData.LevelMovesRemaining <= 0) GameOver();
+        if (GameManager.instance.gameData.LevelMovesRemaining <= 0) Invoke("GameOver", 0.5f);
     }
 
     public void WinLevel()
@@ -107,7 +109,7 @@ public class GameScene : Scene
     public void GameOver()
     {
         GameManager.instance.StopMusic();
-        GameManager.instance.PlaySoundEffect(gameOverClip);
+        GameManager.instance.PlayMusic(gameOverClip);
         gameBoardPanel.SetActive(false);
         gameOverLevel.text = GameManager.instance.gameData.Level.ToString();
         gameOverScore.text = GameManager.instance.gameData.GameScore.ToString();

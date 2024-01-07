@@ -29,6 +29,8 @@ public class Match3Board : MonoBehaviour
     public ArrayLayout arrayLayout; // this is the layout of the board, true means unusable
     public static Match3Board Instance;
 
+    public bool noInput = false;
+
     private void Awake()
     {
         Instance = this;
@@ -44,7 +46,7 @@ public class Match3Board : MonoBehaviour
 
     void Update()
     {
-        if (!isProcessingMove)
+        if (!isProcessingMove & !noInput)
         {
             if (Input.touchCount > 0 || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
             {
@@ -193,29 +195,86 @@ public class Match3Board : MonoBehaviour
         foreach (Match3Item item in itemsToRemove)
         {
             item.isMatched = false;
+            item.YoureFired(true);
         }
         RemoveAndRefill(itemsToRemove);
     }
 
+    private List<Match3Item> GetNeighbors(Match3Item item)
+    {
+        List<Match3Item> neighbors = new();
+        //up
+        if (item.yIndex + 1 < height)
+        {
+            neighbors.Add(gameBoard.GetValue(item.xIndex, item.yIndex + 1));
+        }
+        //right
+        if (item.xIndex + 1 < width)
+        {
+            neighbors.Add(gameBoard.GetValue(item.xIndex + 1, item.yIndex));
+        }
+        //down
+        if (item.yIndex - 1 >= 0)
+        {
+            neighbors.Add(gameBoard.GetValue(item.xIndex, item.yIndex - 1));
+        }
+        //left
+        if (item.xIndex - 1 >= 0)
+        {
+            neighbors.Add(gameBoard.GetValue(item.xIndex - 1, item.yIndex));
+        }
+        return neighbors;
+    }
+
+    private Vector3 DetermineMoveDirection(Match3Item item)
+    {
+        Vector3 moveDirection = Vector3.zero;
+        foreach (Match3Item neighbor in GetNeighbors(item))
+        {
+            if (neighbor.isMatched)
+            {
+                if (neighbor.xIndex > item.xIndex)
+                {
+                    moveDirection.x--;
+                }
+                else if (neighbor.xIndex < item.xIndex)
+                {
+                    moveDirection.x++;
+                }
+                if (neighbor.yIndex > item.yIndex)
+                {
+                    moveDirection.y--;
+                }
+                else if (neighbor.yIndex < item.yIndex)
+                {
+                    moveDirection.y++;
+                }
+            }
+        }
+        return moveDirection;
+    }
+
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
     {
-        if (GameManager.instance.gameData.Sound)
+        foreach (Match3Item item in itemsToRemove)
         {
-            gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
+            item.YoureFired();
+            foreach (Match3Item neighbor in GetNeighbors(item))
+            {
+                neighbor.Cower(DetermineMoveDirection(neighbor));
+            }
         }
         foreach (Match3Item item in itemsToRemove)
         {
             item.isMatched = false;
-            if (item.altImage != null)
-            {
-                item.GetComponent<SpriteRenderer>().sprite = item.altImage;
-            }
-            Instantiate(matchParticlePrefab, new Vector3(item.transform.position.x, item.transform.position.y, itemContainer.transform.position.z), Quaternion.identity);
         }
 
         gameScene.ProcessTurn(itemsToRemove.Count, subtractMoves);
-        yield return new WaitForSeconds(0.5f);
-
+        yield return new WaitForSeconds(0.2f); //YoureFired takes .2 seconds to complete
+        if (GameManager.instance.gameData.Sound)
+        {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
+        }
         RemoveAndRefill(itemsToRemove);
 
         yield return new WaitForSeconds(0.4f);
@@ -259,7 +318,6 @@ public class Match3Board : MonoBehaviour
         foreach (Match3Item item in itemsToRemove)
         {
             gameBoard.SetValue(item.xIndex, item.yIndex, null);
-            Destroy(item.gameObject);
         }
         for (int x = 0; x < width; x++)
         {
