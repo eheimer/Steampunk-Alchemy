@@ -8,9 +8,13 @@ namespace Spinach
     public enum DockPosition
     {
         Top,
+        TopLeft,
         Right,
+        TopRight,
         Bottom,
-        Left
+        BottomRight,
+        Left,
+        BottomLeft,
     }
 
     /// <summary>
@@ -69,12 +73,20 @@ namespace Spinach
             {
                 case DockPosition.Top:
                     return new Vector3(-width * cellSize / 2f, Camera.main.orthographicSize - height * cellSize, 0);
+                case DockPosition.TopLeft:
+                    return new Vector3(-Camera.main.orthographicSize * Camera.main.aspect, Camera.main.orthographicSize - height * cellSize, 0);
                 case DockPosition.Right:
                     return new Vector3(Camera.main.orthographicSize * Camera.main.aspect - width * cellSize, -height * cellSize / 2f, 0);
+                case DockPosition.TopRight:
+                    return new Vector3(Camera.main.orthographicSize * Camera.main.aspect - width * cellSize, Camera.main.orthographicSize - height * cellSize, 0);
                 case DockPosition.Bottom:
                     return new Vector3(-width * cellSize / 2f, -Camera.main.orthographicSize, 0);
+                case DockPosition.BottomRight:
+                    return new Vector3(Camera.main.orthographicSize * Camera.main.aspect - width * cellSize, -Camera.main.orthographicSize, 0);
                 case DockPosition.Left:
                     return new Vector3(-Camera.main.orthographicSize * Camera.main.aspect, -height * cellSize / 2f, 0);
+                case DockPosition.BottomLeft:
+                    return new Vector3(-Camera.main.orthographicSize * Camera.main.aspect, -Camera.main.orthographicSize, 0);
                 default:
                     return Vector3.zero;
             }
@@ -125,7 +137,7 @@ namespace Spinach
                 {
                     for (int y = 0; y < gridArray.GetLength(1); y++)
                     {
-                        //debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 20, Color.white, TextAnchor.MiddleCenter);
+                        debugTextArray[x, y] = UtilsClass.CreateWorldText(gridArray[x, y]?.ToString(), null, GetWorldPosition(x, y) + new Vector3(cellSize, cellSize) * .5f, 20, Color.white, TextAnchor.MiddleCenter);
                         Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x, y + 1), color: Color.white, duration: 100f);
                         Debug.DrawLine(GetWorldPosition(x, y), GetWorldPosition(x + 1, y), color: Color.white, duration: 100f);
                     }
