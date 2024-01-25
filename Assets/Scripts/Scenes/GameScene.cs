@@ -20,6 +20,7 @@ public class GameScene : Scene
     public TMP_Text gameOverBestScore;
     public NamedValue scorePrefab;
     public GameObject scoreboardContainer;
+    [SerializeField] private GameObject steamPrefab;
 
     public bool settings;
 
@@ -54,6 +55,12 @@ public class GameScene : Scene
             {
                 case "GameScore":
                     scoreboard[0].Value = value;
+                    // blast of steam
+                    // if (value > 0 && scoreboard[0]?.transform?.position != null)
+                    // {
+                    //     Quaternion rotation = Quaternion.Euler(9.364f, 26.941f, -107.752f);
+                    //     GameObject steam = Instantiate(steamPrefab, new Vector3(scoreboard[0].transform.position.x, scoreboard[0].transform.position.y, 7), rotation);
+                    // }
                     break;
                 case "LevelGoalRemaining":
                     scoreboard[2].Value = value;

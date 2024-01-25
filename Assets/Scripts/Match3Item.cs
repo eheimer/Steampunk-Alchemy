@@ -8,10 +8,27 @@ public class Match3Item : MonoBehaviour
     public int yIndex;
     public bool isMatched = false;
     public bool isMoving = false;
-    public Sprite mainImage;
-    public Sprite altImage;
+
+    public Sprite[] partImages;
+
     public ParticleSystem matchParticlePrefab;
 
+    public void Awake()
+    {
+        // set a random item type
+        itemType = (Match3ItemType)Random.Range(0, partImages.Length);
+        GetComponent<SpriteRenderer>().sprite = GetImage();
+    }
+
+    public Sprite GetImage()
+    {
+        if ((int)itemType >= partImages.Length)
+        {
+            Debug.LogError("No image for item type " + itemType);
+            return null;
+        }
+        return partImages[(int)itemType];
+    }
 
     public void SetIndices(int x, int y)
     {
@@ -49,10 +66,10 @@ public class Match3Item : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        if (altImage != null)
-        {
-            GetComponent<SpriteRenderer>().sprite = altImage;
-        }
+        // if (altImage != null)
+        // {
+        //     GetComponent<SpriteRenderer>().sprite = altImage;
+        // }
         StartCoroutine(ExplodeCoroutine());
     }
 
@@ -111,9 +128,9 @@ public enum Match3ItemType
 {
     Red,
     Blue,
-    Purple,
     Green,
-    White,
     Yellow,
+    Purple,
+    White,
     Pink
 }

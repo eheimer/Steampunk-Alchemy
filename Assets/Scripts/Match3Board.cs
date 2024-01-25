@@ -6,7 +6,7 @@ public class Match3Board : MonoBehaviour
 {
     public int width = 6;
     public int height = 8;
-    public Match3Item[] itemPrefabs;
+    public Match3Item itemPrefab;
     public Spinach.Grid<Match3Item> gameBoard;
     public GameObject gameBoardGO;
 
@@ -113,8 +113,8 @@ public class Match3Board : MonoBehaviour
             // so the size needs to be the size of the grid +1 in each direction
             // then the scale is set to the size of a cell
             // we set the z position to 9.5 so that it's behind the items (which are at z = 9)
-            GameObject background = Instantiate(backgroundPrefab, new Vector3(0, 0, 9.5f), Quaternion.identity);
-            background.GetComponent<SpriteRenderer>().size = new Vector2((width + 1), (height + 1));
+            GameObject background = Instantiate(backgroundPrefab, new Vector3(0, 1.5f, 9.5f), Quaternion.identity);
+            background.GetComponent<SpriteRenderer>().size = new Vector2((width + 1f), (height + 4.5f));
             background.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
         }
         DestroyItems();
@@ -356,8 +356,7 @@ public class Match3Board : MonoBehaviour
 
     private void SpawnItemAtTop(int x)
     {
-        int randomIndex = Random.Range(0, itemPrefabs.Length);
-        Match3Item newItem = Instantiate(itemPrefabs[randomIndex], gameBoard.GetCellCenter(x, height), Quaternion.identity);
+        Match3Item newItem = Instantiate(itemPrefab, gameBoard.GetCellCenter(x, height), Quaternion.identity);
 
         newItem.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
 
