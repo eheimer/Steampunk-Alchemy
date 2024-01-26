@@ -18,58 +18,44 @@ public class GameScene : Scene
     public TMP_Text gameOverScore;
     public TMP_Text gameOverBestLevel;
     public TMP_Text gameOverBestScore;
-    public NamedValue scorePrefab;
+    public NamedValue movesPrefab;
+    public NamedValue goalPrefab;
     public GameObject scoreboardContainer;
     [SerializeField] private GameObject steamPrefab;
 
     public bool settings;
 
-    private NamedValue[] scoreboard;
+    // private NamedValue[] scoreboard;
     public Spinach.Grid<NamedValue> grid;
 
     protected override void Start()
     {
         base.Start();
         grid = Spinach.Grid<NamedValue>.DockedGrid(4, 1, Spinach.DockPosition.Top, 1.5f);
-
-        scoreboard = new NamedValue[4];
-        for (int x = 0; x < 4; x++)
-        {
-            scoreboard[x] = Instantiate(scorePrefab, grid.GetWorldPosition(x, 0) + new Vector3(.75f, .75f, 0), Quaternion.identity);
-            scoreboard[x].transform.SetParent(scoreboardContainer.transform, false);
-        }
-        scoreboard[0].Title = "score";
-        scoreboard[1].Title = "moves";
-        scoreboard[2].Title = "goal";
-        scoreboard[3].Title = "level";
-
-        scoreboard[0].Value = GameManager.instance.gameData.GameScore;
-        scoreboard[1].Value = GameManager.instance.gameData.LevelMovesRemaining;
-        scoreboard[2].Value = GameManager.instance.gameData.LevelGoalRemaining;
-        scoreboard[3].Value = GameManager.instance.gameData.Level;
+        goalPrefab.Value = GameManager.instance.gameData.LevelGoalRemaining;
+        movesPrefab.Value = GameManager.instance.gameData.LevelMovesRemaining;
 
         //update the scoreboard values when the gameData values change
         GameManager.instance.gameData.onValueChanged += (string key, int value) =>
         {
             switch (key)
             {
-                case "GameScore":
-                    scoreboard[0].Value = value;
-                    // blast of steam
-                    // if (value > 0 && scoreboard[0]?.transform?.position != null)
-                    // {
-                    //     Quaternion rotation = Quaternion.Euler(9.364f, 26.941f, -107.752f);
-                    //     GameObject steam = Instantiate(steamPrefab, new Vector3(scoreboard[0].transform.position.x, scoreboard[0].transform.position.y, 7), rotation);
-                    // }
-                    break;
+                // case "GameScore":
+                //     scoreboard[0].Value = value;
+                //     // blast of steam
+                //     // if (value > 0 && scoreboard[0]?.transform?.position != null)
+                //     // {
+                //     //     Quaternion rotation = Quaternion.Euler(9.364f, 26.941f, -107.752f);
+                //     //     GameObject steam = Instantiate(steamPrefab, new Vector3(scoreboard[0].transform.position.x, scoreboard[0].transform.position.y, 7), rotation);
+                //     // }
+                //     break;
                 case "LevelGoalRemaining":
-                    scoreboard[2].Value = value;
+                    goalPrefab.Value = value;
+                    // scoreboard[2].Value = value;
                     break;
                 case "LevelMovesRemaining":
-                    scoreboard[1].Value = value;
-                    break;
-                case "Level":
-                    scoreboard[3].Value = value;
+                    movesPrefab.Value = value;
+                    // scoreboard[1].Value = value;
                     break;
             }
         };
@@ -88,13 +74,6 @@ public class GameScene : Scene
     public void ProcessTurn(int pointsToGain, bool subtractMoves)
     {
         GameManager.instance.gameData.AddScore(pointsToGain, subtractMoves);
-
-        if (pointsToGain > 0)
-        {
-            // play the swell animation on the score text one time
-            // load the BumpScore transition in the animator
-            // pointsText.GetComponent<Animator>().SetTrigger("BumpScore");
-        }
         if (GameManager.instance.gameData.LevelGoalRemaining <= 0) Invoke("WinLevel", 0.5f);
     }
 

@@ -66,11 +66,7 @@ public class Match3Item : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        // if (altImage != null)
-        // {
-        //     GetComponent<SpriteRenderer>().sprite = altImage;
-        // }
-        StartCoroutine(ExplodeCoroutine());
+        StartCoroutine(MoveAndScaleCoroutine());
     }
 
     public void Cower(Vector3 moveDirection)
@@ -104,21 +100,41 @@ public class Match3Item : MonoBehaviour
         transform.position = startPosition;
     }
 
-
-    private IEnumerator ExplodeCoroutine()
+    private IEnumerator MoveAndScaleCoroutine()
     {
-        float duration = 0.2f;
-        float scale = 1.5f;
+        Vector3 startPosition = transform.position;
+        Vector3 targetPosition = new Vector3(2, 6, transform.position.z);
         Vector3 startScale = transform.localScale;
-        Vector3 targetScale = new Vector3(scale, scale, scale);
+        Vector3 targetScale = Vector3.zero;
+        float duration = 1f; // Adjust this value to control the speed of the movement and scaling
         float elapsedTime = 0f;
+
+        // Instantly scale up
+        transform.localScale = startScale * 1.2f;
+
+        // Wait for a random time between 0 and 0.5 seconds
+        float waitTime = Random.Range(0f, 0.25f);
+        yield return new WaitForSeconds(waitTime);
+
         while (elapsedTime < duration)
         {
-            transform.localScale = Vector3.Lerp(startScale, targetScale, (elapsedTime / duration));
+            float t = elapsedTime / duration;
+
+            // Move along a quadratic bezier curve for a smooth curved motion
+            Vector3 controlPoint = startPosition + (targetPosition - startPosition) / 2 + Vector3.up;
+            transform.position = (1 - t) * (1 - t) * startPosition + 2 * (1 - t) * t * controlPoint + t * t * targetPosition;
+
+            // Gradually shrink to nothing
+            transform.localScale = Vector3.Lerp(startScale * 1.2f, targetScale, t);
+
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+
+        transform.position = targetPosition;
         transform.localScale = targetScale;
+
+        // Continue with your explosion effect and destruction of the game object
         Instantiate(matchParticlePrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
