@@ -20,14 +20,14 @@ public class SettingsHandler : MonoBehaviour
         button.SetActive(false);
         panel.SetActive(true);
         //disable swipes on the Match3Board while the settings panel is open
-        Match3Board.Instance.noInput = true;
+        Match3Board.Instance.ignoreInput = true;
     }
 
     public void SettingsCloseButtonAction()
     {
         button.SetActive(true);
         panel.SetActive(false);
-        Match3Board.Instance.noInput = false;
+        Match3Board.Instance.ignoreInput = false;
     }
 
     public void SettinsQuitButtonAction()

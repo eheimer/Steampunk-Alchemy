@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Diagnostics;
 using Spinach;
 
 public class Match3Board : MonoBehaviour
@@ -9,7 +8,7 @@ public class Match3Board : MonoBehaviour
     public int width = 6;
     public int height = 8;
     public Match3Item itemPrefab;
-    public Spinach.Grid<Match3Item> gameBoard;
+    public Grid<Match3Item> gameBoard;
     public GameObject gameBoardGO;
 
     public GameObject backgroundPrefab;
@@ -20,6 +19,8 @@ public class Match3Board : MonoBehaviour
 
     [SerializeField]
     private Match3Item selectedItem;
+    private Match3Item swapItem;
+
     [SerializeField]
     private bool isProcessingMove;
     [SerializeField]
@@ -28,10 +29,13 @@ public class Match3Board : MonoBehaviour
     public ParticleSystem matchParticlePrefab;
     public AudioClip matchClip;
 
+    [SerializeField]
+    Material hilight;
+
     public ArrayLayout arrayLayout; // this is the layout of the board, true means unusable
     public static Match3Board Instance;
 
-    public bool noInput = false;
+    public bool ignoreInput = false;
 
     private void Awake()
     {
@@ -48,7 +52,7 @@ public class Match3Board : MonoBehaviour
 
     void Update()
     {
-        if (!isProcessingMove & !noInput)
+        if (!isProcessingMove & !ignoreInput)
         {
             if (Input.touchCount > 0 || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
             {
@@ -60,6 +64,7 @@ public class Match3Board : MonoBehaviour
                     {
                         Match3Item item = hit.collider.gameObject.GetComponent<Match3Item>();
                         selectedItem = item;
+                        selectedItem.gameObject.GetComponent<SpriteRenderer>().material = hilight;
                         touchStartPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
                     }
                 }
@@ -72,6 +77,9 @@ public class Match3Board : MonoBehaviour
                     var minSwipeDistance = 0.5f;
                     if ((Camera.main.ScreenToWorldPoint(touchEndPos) - Camera.main.ScreenToWorldPoint(touchStartPos)).magnitude < minSwipeDistance)
                     {
+                        touchStartPos = touchEndPos = default;
+                        selectedItem.gameObject.GetComponent<SpriteRenderer>().material = new Material(Shader.Find("Sprites/Default"));
+                        selectedItem = null;
                         return;
                     }
 
@@ -105,6 +113,7 @@ public class Match3Board : MonoBehaviour
                         StartProcessingMove();
                         SwapItem(swapItem, selectedItem);
                     }
+                    selectedItem.gameObject.GetComponent<SpriteRenderer>().material = new Material(Shader.Find("Sprites/Default"));
                     selectedItem = null;
                 }
             }

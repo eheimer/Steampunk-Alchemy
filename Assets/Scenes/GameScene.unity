@@ -3624,6 +3624,7 @@ MonoBehaviour:
   itemsToRemove: []
   matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
   matchClip: {fileID: 8300000, guid: 6fb4252918c27f44e833a7bdd3ac8da5, type: 3}
+  hilight: {fileID: 2100000, guid: 8451274a85c05ffc08badf972283d3ed, type: 2}
   arrayLayout:
     rows:
     - row: 000000000000
@@ -3634,7 +3635,7 @@ MonoBehaviour:
     - row: 000000000000
     - row: 000000000000
     - row: 000000000000
-  noInput: 0
+  ignoreInput: 0
 --- !u!114 &2050507468
 MonoBehaviour:
   m_ObjectHideFlags: 0
