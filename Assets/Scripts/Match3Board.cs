@@ -231,7 +231,7 @@ public class Match3Board : MonoBehaviour
         {
             item.isMatched = false;
         }
-        gameScene.ProcessTurn(itemsToRemove.Count, subtractMoves);
+        var win = gameScene.ProcessTurn(itemsToRemove.Count, subtractMoves);
 
         if (CheckBoard())
         {
@@ -239,7 +239,7 @@ public class Match3Board : MonoBehaviour
         }
         else
         {
-            gameScene.CheckGameOver();
+            if (!win) gameScene.CheckGameOver();
             EndProcessingMove();
         }
     }
