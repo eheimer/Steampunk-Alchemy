@@ -71,10 +71,21 @@ public class GameScene : Scene
         return levelMusic[Random.Range(0, levelMusic.Length)];
     }
 
-    public void ProcessTurn(int pointsToGain, bool subtractMoves)
+    /// <summary>
+    /// Processes a turn in the game.
+    /// </summary>
+    /// <param name="pointsToGain">The number of points to add to the score for this turn.</param>
+    /// <param name="subtractMoves">If true, subtracts a move from the remaining moves. If false, the number of moves remains the same.</param>
+    /// <returns>True if the level goal has been reached and the level is won. False otherwise.</returns>
+    public bool ProcessTurn(int pointsToGain, bool subtractMoves)
     {
         GameManager.instance.gameData.AddScore(pointsToGain, subtractMoves);
-        if (GameManager.instance.gameData.LevelGoalRemaining <= 0) WinLevel();
+        if (GameManager.instance.gameData.LevelGoalRemaining <= 0)
+        {
+            WinLevel();
+            return true;
+        }
+        return false;
     }
 
     public void CheckGameOver()
@@ -82,7 +93,7 @@ public class GameScene : Scene
         if (GameManager.instance.gameData.LevelMovesRemaining <= 0) GameOver();
     }
 
-    public void WinLevel()
+    private void WinLevel()
     {
         GameManager.instance.StopMusic();
         GameManager.instance.PlaySoundEffect(levelWinClip);
@@ -92,7 +103,7 @@ public class GameScene : Scene
         return;
     }
 
-    public void GameOver()
+    private void GameOver()
     {
         GameManager.instance.StopMusic();
         GameManager.instance.PlayMusic(gameOverClip);
