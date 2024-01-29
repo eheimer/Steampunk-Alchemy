@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
+        Screen.orientation = ScreenOrientation.Portrait;
         if (FindObjectsOfType<GameManager>().Length > 1)
         {
             DestroyAll();
