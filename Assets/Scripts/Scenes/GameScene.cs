@@ -74,12 +74,12 @@ public class GameScene : Scene
     public void ProcessTurn(int pointsToGain, bool subtractMoves)
     {
         GameManager.instance.gameData.AddScore(pointsToGain, subtractMoves);
-        if (GameManager.instance.gameData.LevelGoalRemaining <= 0) Invoke("WinLevel", 0.5f);
+        if (GameManager.instance.gameData.LevelGoalRemaining <= 0) WinLevel();
     }
 
     public void CheckGameOver()
     {
-        if (GameManager.instance.gameData.LevelMovesRemaining <= 0) Invoke("GameOver", 0.5f);
+        if (GameManager.instance.gameData.LevelMovesRemaining <= 0) GameOver();
     }
 
     public void WinLevel()

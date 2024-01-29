@@ -52,10 +52,10 @@ MonoBehaviour:
   isMatched: 0
   isMoving: 0
   partImages:
-  - {fileID: 830005806, guid: 71872e331613b96a887c1c12542afde4, type: 3}
-  - {fileID: 642991525, guid: 71872e331613b96a887c1c12542afde4, type: 3}
-  - {fileID: 1424597634, guid: 71872e331613b96a887c1c12542afde4, type: 3}
-  - {fileID: 1571755803, guid: 71872e331613b96a887c1c12542afde4, type: 3}
+  - {fileID: 411785740, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
+  - {fileID: -1484054822, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
+  - {fileID: -207286385, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
+  - {fileID: -694918551, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
   matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
 --- !u!212 &7753099647871579110
 SpriteRenderer:

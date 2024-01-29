@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Diagnostics;
+using Spinach;
 
 public class Match3Board : MonoBehaviour
 {
@@ -66,7 +68,15 @@ public class Match3Board : MonoBehaviour
                     if (touchStartPos == default || selectedItem == default) return;
                     touchEndPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
                     Vector2 swipeDirection = (touchEndPos - touchStartPos).normalized;
+
+                    var minSwipeDistance = 0.5f;
+                    if ((Camera.main.ScreenToWorldPoint(touchEndPos) - Camera.main.ScreenToWorldPoint(touchStartPos)).magnitude < minSwipeDistance)
+                    {
+                        return;
+                    }
+
                     touchStartPos = touchEndPos = default;
+
                     Match3Item swapItem = null;
                     if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
                     {
@@ -195,89 +205,33 @@ public class Match3Board : MonoBehaviour
         foreach (Match3Item item in itemsToRemove)
         {
             item.isMatched = false;
-            item.YoureFired(true);
+            Destroy(item.gameObject);
         }
         RemoveAndRefill(itemsToRemove);
     }
 
-    private List<Match3Item> GetNeighbors(Match3Item item)
-    {
-        List<Match3Item> neighbors = new();
-        //up
-        if (item.yIndex + 1 < height)
-        {
-            neighbors.Add(gameBoard.GetValue(item.xIndex, item.yIndex + 1));
-        }
-        //right
-        if (item.xIndex + 1 < width)
-        {
-            neighbors.Add(gameBoard.GetValue(item.xIndex + 1, item.yIndex));
-        }
-        //down
-        if (item.yIndex - 1 >= 0)
-        {
-            neighbors.Add(gameBoard.GetValue(item.xIndex, item.yIndex - 1));
-        }
-        //left
-        if (item.xIndex - 1 >= 0)
-        {
-            neighbors.Add(gameBoard.GetValue(item.xIndex - 1, item.yIndex));
-        }
-        return neighbors;
-    }
-
-    private Vector3 DetermineMoveDirection(Match3Item item)
-    {
-        Vector3 moveDirection = Vector3.zero;
-        foreach (Match3Item neighbor in GetNeighbors(item))
-        {
-            if (neighbor.isMatched)
-            {
-                if (neighbor.xIndex > item.xIndex)
-                {
-                    moveDirection.x--;
-                }
-                else if (neighbor.xIndex < item.xIndex)
-                {
-                    moveDirection.x++;
-                }
-                if (neighbor.yIndex > item.yIndex)
-                {
-                    moveDirection.y--;
-                }
-                else if (neighbor.yIndex < item.yIndex)
-                {
-                    moveDirection.y++;
-                }
-            }
-        }
-        return moveDirection;
-    }
-
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
     {
+        List<Coroutine> itemAnimations = new();
         foreach (Match3Item item in itemsToRemove)
         {
-            item.YoureFired();
-            foreach (Match3Item neighbor in GetNeighbors(item))
-            {
-                neighbor.Cower(DetermineMoveDirection(neighbor));
-            }
+            itemAnimations.Add(StartCoroutine(item.YoureFired()));
+        }
+        if (GameManager.instance.gameData.Sound)
+        {
+            gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
+        }
+        StartCoroutine(Spinach.Utils.WaitAndExecute(.25f, () => RemoveAndRefill(itemsToRemove)));
+
+        foreach (Coroutine itemAnimation in itemAnimations)
+        {
+            yield return itemAnimation;
         }
         foreach (Match3Item item in itemsToRemove)
         {
             item.isMatched = false;
         }
-
         gameScene.ProcessTurn(itemsToRemove.Count, subtractMoves);
-        yield return new WaitForSeconds(0.2f); //YoureFired takes .2 seconds to complete
-        if (GameManager.instance.gameData.Sound)
-        {
-            gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
-        }
-        RemoveAndRefill(itemsToRemove);
-
-        yield return new WaitForSeconds(0.4f);
 
         if (CheckBoard())
         {

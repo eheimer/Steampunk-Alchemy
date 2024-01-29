@@ -20,7 +20,7 @@ public class Match3Item : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = GetImage();
     }
 
-    public Sprite GetImage()
+    private Sprite GetImage()
     {
         if ((int)itemType >= partImages.Length)
         {
@@ -28,6 +28,12 @@ public class Match3Item : MonoBehaviour
             return null;
         }
         return partImages[(int)itemType];
+    }
+
+    public void SetType(Match3ItemType newType)
+    {
+        itemType = newType;
+        GetComponent<SpriteRenderer>().sprite = GetImage();
     }
 
     public void SetIndices(int x, int y)
@@ -59,54 +65,13 @@ public class Match3Item : MonoBehaviour
         isMoving = false;
     }
 
-    public void YoureFired(bool goQuietly = false)
-    {
-        if (goQuietly)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        StartCoroutine(MoveAndScaleCoroutine());
-    }
-
-    public void Cower(Vector3 moveDirection)
-    {
-        if (isMatched) return;
-        StartCoroutine(CowerCoroutine(moveDirection));
-    }
-
-    private IEnumerator CowerCoroutine(Vector3 moveDirection)
-    {
-        float duration = 0.2f;
-        float scale = 0.75f;
-        float moveDistance = 0.25f;
-        moveDirection *= moveDistance;
-        Vector3 startScale = transform.localScale;
-        Vector3 targetScale = new Vector3(scale, scale, scale);
-        Vector3 startPosition = transform.position;
-
-        float elapsedTime = 0f;
-        while (elapsedTime < duration)
-        {
-            transform.localScale = Vector3.Lerp(startScale, targetScale, (elapsedTime / duration));
-            //move in the direction of moveDirection
-            transform.position = Vector3.Lerp(startPosition, startPosition + moveDirection, (elapsedTime / duration));
-
-
-            elapsedTime += Time.deltaTime;
-            yield return null;
-        }
-        transform.localScale = startScale;
-        transform.position = startPosition;
-    }
-
-    private IEnumerator MoveAndScaleCoroutine()
+    public IEnumerator YoureFired()
     {
         Vector3 startPosition = transform.position;
         Vector3 targetPosition = new Vector3(2, 6, transform.position.z);
         Vector3 startScale = transform.localScale;
         Vector3 targetScale = Vector3.zero;
-        float duration = 1f; // Adjust this value to control the speed of the movement and scaling
+        float duration = .5f; // Adjust this value to control the speed of the movement and scaling
         float elapsedTime = 0f;
 
         // Instantly scale up
