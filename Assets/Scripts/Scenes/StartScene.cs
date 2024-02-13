@@ -17,7 +17,6 @@ public class StartScene : Scene
   }
   public void PlayButtonAction()
   {
-    GameManager.instance.gameData.Restart();
     SceneManager.LoadScene(SceneName.Game.name());
   }
 }

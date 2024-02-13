@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        gameData = new GameData(startingGoal, startingMoves);
+        gameData = new GameData();
         instance = this;
         DontDestroyOnLoad(gameObject);
 
@@ -57,11 +57,6 @@ public class GameManager : MonoBehaviour
                 soundEffectsPlayer.enabled = value == 1;
             }
         };
-
-        if (gameData.GameInProgress)
-        {
-            SceneManager.LoadScene(SceneName.Game.name());
-        }
     }
 
     /// <summary>

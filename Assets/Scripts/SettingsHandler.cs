@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -32,7 +29,6 @@ public class SettingsHandler : MonoBehaviour
 
     public void SettinsQuitButtonAction()
     {
-        GameManager.instance.gameData.GameOver(); ;
         SceneManager.LoadScene(SceneName.Start.name());
     }
 

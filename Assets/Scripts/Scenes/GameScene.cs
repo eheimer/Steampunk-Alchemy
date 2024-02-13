@@ -6,27 +6,26 @@ using UnityEngine.SceneManagement;
 public class GameScene : Scene
 {
     public AudioClip[] levelMusic;
-    public AudioClip levelWinClip;
-    public AudioClip gameOverClip;
+    public AudioClip victoryClip;
+    public AudioClip failClip;
     public GameObject gameBoardPanel;
     public GameObject victoryPanel;
-    public GameObject gameOverPanel;
-    public TMP_Text victoryLevel;
-    public TMP_Text gameOverLevel;
-    public TMP_Text gameOverScore;
-    public TMP_Text gameOverBestLevel;
-    public TMP_Text gameOverBestScore;
+    public GameObject failPanel;
     public NamedValue movesPrefab;
-    public NamedValue goalPrefab;
     public GameObject scoreboardContainer;
     [SerializeField] private GameObject steamPrefab;
     [SerializeField] private Part partGoalPrefab;
+
+    private int score;  // the player's score for this game board
 
     private Dictionary<Match3ItemType, GoalItem> goalItems = new Dictionary<Match3ItemType, GoalItem>();
 
     public bool settings;
 
     public Spinach.Grid<NamedValue> goalsGrid;
+
+    public int movesPerLevel = 10;
+    public int movesRemaining = 10;
 
     protected override void Start()
     {
@@ -41,33 +40,9 @@ public class GameScene : Scene
             //goalItems.Add(type, new GoalItem(goalItem,false));
         }
 
-        goalPrefab.Value = GameManager.instance.gameData.LevelGoalRemaining;
-        movesPrefab.Value = GameManager.instance.gameData.LevelMovesRemaining;
-
-        //update the scoreboard values when the gameData values change
-        GameManager.instance.gameData.onValueChanged += (string key, int value) =>
-        {
-            switch (key)
-            {
-                // case "GameScore":
-                //     scoreboard[0].Value = value;
-                //     // blast of steam
-                //     // if (value > 0 && scoreboard[0]?.transform?.position != null)
-                //     // {
-                //     //     Quaternion rotation = Quaternion.Euler(9.364f, 26.941f, -107.752f);
-                //     //     GameObject steam = Instantiate(steamPrefab, new Vector3(scoreboard[0].transform.position.x, scoreboard[0].transform.position.y, 7), rotation);
-                //     // }
-                //     break;
-                case "LevelGoalRemaining":
-                    goalPrefab.Value = value;
-                    // scoreboard[2].Value = value;
-                    break;
-                case "LevelMovesRemaining":
-                    movesPrefab.Value = value;
-                    // scoreboard[1].Value = value;
-                    break;
-            }
-        };
+        // determine moves based on gameData.Score
+        movesPrefab.Value = movesPerLevel;
+        movesRemaining = movesPerLevel;
     }
 
     public override bool HasMusic()
@@ -88,56 +63,53 @@ public class GameScene : Scene
     /// <returns>True if the level goal has been reached and the level is won. False otherwise.</returns>
     public bool ProcessTurn(int pointsToGain, bool subtractMoves)
     {
-        GameManager.instance.gameData.AddScore(pointsToGain, subtractMoves);
-        if (GameManager.instance.gameData.LevelGoalRemaining <= 0)
-        {
-            WinLevel();
-            return true;
-        }
+        score += pointsToGain;
+        if (subtractMoves) movesRemaining--;
+        // check goals for this game board.
+        // if all goals are met, call WinLevel() and return true.
+        // if not, return false.
         return false;
     }
 
-    public void CheckGameOver()
+    public void CheckFail()
     {
-        if (GameManager.instance.gameData.LevelMovesRemaining <= 0) GameOver();
+        if (movesRemaining <= 0) Fail();
     }
 
     private void WinLevel()
     {
         GameManager.instance.StopMusic();
-        GameManager.instance.PlaySoundEffect(levelWinClip);
+        GameManager.instance.PlaySoundEffect(victoryClip);
         gameBoardPanel.SetActive(false);
-        victoryLevel.text = GameManager.instance.gameData.Level.ToString();
+        //victoryLevel.text = GameManager.instance.gameData.Level.ToString();
         victoryPanel.SetActive(true);
         return;
     }
 
-    private void GameOver()
+    private void Fail()
     {
         GameManager.instance.StopMusic();
-        GameManager.instance.PlayMusic(gameOverClip);
+        GameManager.instance.PlayMusic(failClip);
         gameBoardPanel.SetActive(false);
-        gameOverLevel.text = GameManager.instance.gameData.Level.ToString();
-        gameOverScore.text = GameManager.instance.gameData.GameScore.ToString();
-        gameOverBestLevel.text = GameManager.instance.gameData.BestLevel.ToString();
-        gameOverBestScore.text = GameManager.instance.gameData.BestScore.ToString();
+        //gameOverLevel.text = GameManager.instance.gameData.Level.ToString();
+        //gameOverScore.text = GameManager.instance.gameData.Score.ToString();
+        // gameOverBestLevel.text = GameManager.instance.gameData.BestLevel.ToString();
+        // gameOverBestScore.text = GameManager.instance.gameData.BestScore.ToString();
 
-        GameManager.instance.gameData.GameOver();
-        gameOverPanel.SetActive(true);
+        //GameManager.instance.gameData.GameOver();
+        failPanel.SetActive(true);
         return;
     }
 
     public void NextLevelButtonAction()
     {
-        GameManager.instance.gameData.NextLevel(GameManager.instance.gameData.Goal + Random.Range(5, 10), GameManager.instance.startingMoves);
-        SceneManager.LoadScene(SceneName.Game.name());
+        SceneManager.LoadScene(SceneName.Start.name());
     }
 
 
 
     public void RestartButtonAction()
     {
-        GameManager.instance.gameData.Restart();
         SceneManager.LoadScene(SceneName.Start.name());
     }
 }

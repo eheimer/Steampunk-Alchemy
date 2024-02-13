@@ -249,7 +249,7 @@ public class Match3Board : MonoBehaviour
         }
         else
         {
-            if (!win) gameScene.CheckGameOver();
+            if (!win) gameScene.CheckFail();
             EndProcessingMove();
         }
     }
