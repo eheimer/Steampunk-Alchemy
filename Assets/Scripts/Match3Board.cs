@@ -7,24 +7,24 @@ public class Match3Board : MonoBehaviour
 {
     public int width = 6;
     public int height = 8;
-    public Match3Item itemPrefab;
-    public Grid<Match3Item> gameBoard;
+    public Match3Part itemPrefab;
+    public Grid<Match3Part> gameBoard;
     public GameObject gameBoardGO;
 
-    public GameObject backgroundPrefab;
+    public GameObject background;
     public List<GameObject> itemsToDestroy = new();
     public GameObject itemContainer;
 
     public GameScene gameScene;
 
     [SerializeField]
-    private Match3Item selectedItem;
-    private Match3Item swapItem;
+    private Match3Part selectedItem;
+    private Match3Part swapItem;
 
     [SerializeField]
     private bool isProcessingMove;
     [SerializeField]
-    List<Match3Item> itemsToRemove = new();
+    List<Match3Part> itemsToRemove = new();
 
     public ParticleSystem matchParticlePrefab;
     public AudioClip matchClip;
@@ -60,9 +60,9 @@ public class Match3Board : MonoBehaviour
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
                     RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
-                    if (hit.collider != null && hit.collider.GetComponent<Match3Item>() != null)
+                    if (hit.collider != null && hit.collider.GetComponent<Match3Part>() != null)
                     {
-                        Match3Item item = hit.collider.gameObject.GetComponent<Match3Item>();
+                        Match3Part item = hit.collider.gameObject.GetComponent<Match3Part>();
                         selectedItem = item;
                         selectedItem.gameObject.GetComponent<SpriteRenderer>().material = hilight;
                         touchStartPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
@@ -85,7 +85,7 @@ public class Match3Board : MonoBehaviour
 
                     touchStartPos = touchEndPos = default;
 
-                    Match3Item swapItem = null;
+                    Match3Part swapItem = null;
                     if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
                     {
                         if (swipeDirection.x > 0)
@@ -124,7 +124,7 @@ public class Match3Board : MonoBehaviour
     {
         if (gameBoard == null)
         {
-            gameBoard = Spinach.Grid<Match3Item>.FitAndCenteredGrid(width, height);
+            gameBoard = Spinach.Grid<Match3Part>.FitAndCenteredGrid(width, height);
             gameBoard.SetUsable(arrayLayout.ConvertToUsableArray());
 
             // I'm finally starting to understand how Unity units work:
@@ -132,7 +132,8 @@ public class Match3Board : MonoBehaviour
             // so the size needs to be the size of the grid +1 in each direction
             // then the scale is set to the size of a cell
             // we set the z position to 9.5 so that it's behind the items (which are at z = 9)
-            GameObject background = Instantiate(backgroundPrefab, new Vector3(0, 1.5f, 9.5f), Quaternion.identity);
+            // GameObject background = Instantiate(backgroundPrefab, new Vector3(0, 1.5f, 9.5f), Quaternion.identity);
+            background.transform.position = new Vector3(0, 1.5f, 9.5f);
             background.GetComponent<SpriteRenderer>().size = new Vector2((width + 1f), (height + 4.5f));
             background.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
         }
@@ -157,7 +158,7 @@ public class Match3Board : MonoBehaviour
 
     private void DestroyItems()
     {
-        foreach (Match3Item item in gameBoard.Each())
+        foreach (Match3Part item in gameBoard.Each())
         {
             if (item != null)
             {
@@ -172,7 +173,7 @@ public class Match3Board : MonoBehaviour
 
         itemsToRemove.Clear();
 
-        foreach (Match3Item item in gameBoard.Each())
+        foreach (Match3Part item in gameBoard.Each())
         {
             if (item != null)
             {
@@ -186,7 +187,7 @@ public class Match3Board : MonoBehaviour
             {
                 if (gameBoard.IsUsable(x, y))
                 {
-                    Match3Item item = gameBoard.GetValue(x, y);
+                    Match3Part item = gameBoard.GetValue(x, y);
                     if (!item.isMatched)
                     {
                         MatchResult matchedItems = IsConnected(item);
@@ -195,7 +196,7 @@ public class Match3Board : MonoBehaviour
                             MatchResult superMatchedItems = SuperMatch(matchedItems);
 
                             itemsToRemove.AddRange(superMatchedItems.connectedItems);
-                            foreach (Match3Item superItem in superMatchedItems.connectedItems)
+                            foreach (Match3Part superItem in superMatchedItems.connectedItems)
                             {
                                 superItem.isMatched = true;
                             }
@@ -211,7 +212,7 @@ public class Match3Board : MonoBehaviour
     // this is done during board set up, so we start with a board that has no matches
     public void ReplaceMatchedItems()
     {
-        foreach (Match3Item item in itemsToRemove)
+        foreach (Match3Part item in itemsToRemove)
         {
             item.isMatched = false;
             Destroy(item.gameObject);
@@ -222,7 +223,7 @@ public class Match3Board : MonoBehaviour
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
     {
         List<Coroutine> itemAnimations = new();
-        foreach (Match3Item item in itemsToRemove)
+        foreach (Match3Part item in itemsToRemove)
         {
             itemAnimations.Add(StartCoroutine(item.YoureFired()));
         }
@@ -236,7 +237,7 @@ public class Match3Board : MonoBehaviour
         {
             yield return itemAnimation;
         }
-        foreach (Match3Item item in itemsToRemove)
+        foreach (Match3Part item in itemsToRemove)
         {
             item.isMatched = false;
         }
@@ -276,9 +277,9 @@ public class Match3Board : MonoBehaviour
     }
 
     #region Cascading Matches
-    private void RemoveAndRefill(List<Match3Item> itemsToRemove)
+    private void RemoveAndRefill(List<Match3Part> itemsToRemove)
     {
-        foreach (Match3Item item in itemsToRemove)
+        foreach (Match3Part item in itemsToRemove)
         {
             gameBoard.SetValue(item.xIndex, item.yIndex, null);
         }
@@ -304,7 +305,7 @@ public class Match3Board : MonoBehaviour
         if (y + yOffset < height && gameBoard.GetValue(x, y + yOffset) != null)
         {
             // we've found an item
-            Match3Item itemAbove = gameBoard.GetValue(x, y + yOffset);
+            Match3Part itemAbove = gameBoard.GetValue(x, y + yOffset);
             Vector3 targetPos = gameBoard.GetCellCenter(x, y);
             itemAbove.MoveToTarget(targetPos);
             itemAbove.SetIndices(x, y);
@@ -319,7 +320,8 @@ public class Match3Board : MonoBehaviour
 
     private void SpawnItemAtTop(int x)
     {
-        Match3Item newItem = Instantiate(itemPrefab, gameBoard.GetCellCenter(x, height), Quaternion.identity);
+        Match3Part newItem = Instantiate(itemPrefab, gameBoard.GetCellCenter(x, height), Quaternion.identity);
+        newItem.Init();
 
         newItem.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
 
@@ -352,9 +354,9 @@ public class Match3Board : MonoBehaviour
     {
         if (matchedItems.direction == MatchDirection.Horizontal || matchedItems.direction == MatchDirection.LongHorizontal)
         {
-            foreach (Match3Item item in matchedItems.connectedItems)
+            foreach (Match3Part item in matchedItems.connectedItems)
             {
-                List<Match3Item> extraConnectedItems = new();
+                List<Match3Part> extraConnectedItems = new();
                 CheckDirection(item, new Vector2Int(0, 1), extraConnectedItems);
                 CheckDirection(item, new Vector2Int(0, -1), extraConnectedItems);
 
@@ -367,9 +369,9 @@ public class Match3Board : MonoBehaviour
         }
         else if (matchedItems.direction == MatchDirection.Vertical || matchedItems.direction == MatchDirection.LongVertical)
         {
-            foreach (Match3Item item in matchedItems.connectedItems)
+            foreach (Match3Part item in matchedItems.connectedItems)
             {
-                List<Match3Item> extraConnectedItems = new();
+                List<Match3Part> extraConnectedItems = new();
                 CheckDirection(item, new Vector2Int(1, 0), extraConnectedItems);
                 CheckDirection(item, new Vector2Int(-1, 0), extraConnectedItems);
 
@@ -383,10 +385,10 @@ public class Match3Board : MonoBehaviour
         return new MatchResult { connectedItems = matchedItems.connectedItems, direction = matchedItems.direction };
     }
 
-    MatchResult IsConnected(Match3Item item)
+    MatchResult IsConnected(Match3Part item)
     {
         //initialize the list
-        List<Match3Item> connectedItems = new() { item };
+        List<Match3Part> connectedItems = new() { item };
 
         //check horizontal
         CheckDirection(item, new Vector2Int(1, 0), connectedItems);
@@ -411,7 +413,7 @@ public class Match3Board : MonoBehaviour
         return new MatchResult { connectedItems = connectedItems, direction = MatchDirection.None };
     }
 
-    void CheckDirection(Match3Item item, Vector2Int direction, List<Match3Item> connectedItems)
+    void CheckDirection(Match3Part item, Vector2Int direction, List<Match3Part> connectedItems)
     {
         Match3ItemType itemType = item.itemType;
         int x = item.xIndex + direction.x;
@@ -421,7 +423,7 @@ public class Match3Board : MonoBehaviour
         {
             if (gameBoard.IsUsable(x, y))
             {
-                Match3Item neighborItem = gameBoard.GetValue(x, y);
+                Match3Part neighborItem = gameBoard.GetValue(x, y);
                 if (!neighborItem.isMatched && neighborItem.itemType == itemType)
                 {
                     connectedItems.Add(neighborItem);
@@ -439,16 +441,16 @@ public class Match3Board : MonoBehaviour
 
     #region Swapping Items
 
-    private void SwapItem(Match3Item current, Match3Item target)
+    private void SwapItem(Match3Part current, Match3Part target)
     {
         DoSwap(current, target);
 
         StartCoroutine(ProcessMatches(current, target));
     }
 
-    private void DoSwap(Match3Item current, Match3Item target)
+    private void DoSwap(Match3Part current, Match3Part target)
     {
-        Match3Item temp = gameBoard.GetValue(current.xIndex, current.yIndex);
+        Match3Part temp = gameBoard.GetValue(current.xIndex, current.yIndex);
 
         gameBoard.SetValue(current.xIndex, current.yIndex, gameBoard.GetValue(target.xIndex, target.yIndex));
         gameBoard.SetValue(target.xIndex, target.yIndex, temp);
@@ -463,13 +465,13 @@ public class Match3Board : MonoBehaviour
         target.MoveToTarget(gameBoard.GetValue(current.xIndex, current.yIndex).transform.position);
     }
 
-    private bool IsAdjacent(Match3Item current, Match3Item target)
+    private bool IsAdjacent(Match3Part current, Match3Part target)
     {
         return Mathf.Abs(current.xIndex - target.xIndex) + Mathf.Abs(current.yIndex - target.yIndex) == 1;
     }
 
     // this happens only once per turn.  If the swap results in a match, we process the matches.  If not, we swap back.
-    private IEnumerator ProcessMatches(Match3Item current, Match3Item target)
+    private IEnumerator ProcessMatches(Match3Part current, Match3Part target)
     {
         yield return new WaitForSeconds(0.2f);
         if (CheckBoard())
@@ -488,7 +490,7 @@ public class Match3Board : MonoBehaviour
 
 public class MatchResult
 {
-    public List<Match3Item> connectedItems;
+    public List<Match3Part> connectedItems;
     public MatchDirection direction;
 
 }

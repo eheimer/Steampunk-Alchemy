@@ -140,4 +140,48 @@ public class GameData
     {
         Sound = !Sound;
     }
+
+    // public Dictionary<int, GoalItem[]> LevelGoals = new Dictionary<int, GoalItem[]>(){
+    //     {1, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 10),
+    //         new GoalItem(Match3ItemType.Green, false, 10),
+    //         new GoalItem(Match3ItemType.Red, false, 10),
+    //         new GoalItem(Match3ItemType.Yellow, false, 10)
+    //     }},
+    //     {2, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 15),
+    //         new GoalItem(Match3ItemType.Green, false, 15),
+    //         new GoalItem(Match3ItemType.Red, false, 15),
+    //         new GoalItem(Match3ItemType.Yellow, false, 15)
+    //     }},
+    //     {3, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 20),
+    //         new GoalItem(Match3ItemType.Green, false, 20),
+    //         new GoalItem(Match3ItemType.Red, false, 20),
+    //         new GoalItem(Match3ItemType.Yellow, false, 20)
+    //     }},
+    //     {4, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 25),
+    //         new GoalItem(Match3ItemType.Green, false, 25),
+    //         new GoalItem(Match3ItemType.Red, false, 25),
+    //         new GoalItem(Match3ItemType.Yellow, false, 25)
+    //     }},
+    //     {5, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 30),
+    //         new GoalItem(Match3ItemType.Green, false, 30),
+    //         new GoalItem(Match3ItemType.Red, false, 30),
+    //         new GoalItem(Match3ItemType.Yellow, false, 30)
+    //     }},
+    //     {6, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 35),
+    //         new GoalItem(Match3ItemType.Green, false, 35),
+    //         new GoalItem(Match3ItemType.Red, false, 35),
+    //         new GoalItem(Match3ItemType.Yellow, false, 35)
+    //     }},
+    //     {7, new GoalItem[]{
+    //         new GoalItem(Match3ItemType.Blue, false, 35),
+    //         new GoalItem(Match3ItemType.Green, false, 35),
+    //         new GoalItem(Match3ItemType.Red, false, 35),
+    //         new GoalItem(Match3ItemType.Yellow, false, 35)
+    //     }} };
 }

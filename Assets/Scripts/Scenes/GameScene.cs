@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AdaptivePerformance;
 using UnityEngine.SceneManagement;
 
 public class GameScene : Scene
@@ -22,16 +20,27 @@ public class GameScene : Scene
     public NamedValue goalPrefab;
     public GameObject scoreboardContainer;
     [SerializeField] private GameObject steamPrefab;
+    [SerializeField] private Part partGoalPrefab;
+
+    private Dictionary<Match3ItemType, GoalItem> goalItems = new Dictionary<Match3ItemType, GoalItem>();
 
     public bool settings;
 
-    // private NamedValue[] scoreboard;
-    public Spinach.Grid<NamedValue> grid;
+    public Spinach.Grid<NamedValue> goalsGrid;
 
     protected override void Start()
     {
         base.Start();
-        grid = Spinach.Grid<NamedValue>.DockedGrid(4, 1, Spinach.DockPosition.Top, 1.5f);
+        goalsGrid = Spinach.Grid<NamedValue>.DockedGrid(4, 1, Spinach.DockPosition.Bottom, 1f);
+        goalItems.Clear();
+        for (int i = 0; i < System.Enum.GetNames(typeof(Match3ItemType)).Length; i++)
+        {
+            Match3ItemType type = (Match3ItemType)i;
+            Part goalItem = Instantiate(partGoalPrefab, goalsGrid.GetCellCenter(i, 0), Quaternion.identity, scoreboardContainer.transform);
+            goalItem.Init(type, false);
+            //goalItems.Add(type, new GoalItem(goalItem,false));
+        }
+
         goalPrefab.Value = GameManager.instance.gameData.LevelGoalRemaining;
         movesPrefab.Value = GameManager.instance.gameData.LevelMovesRemaining;
 
@@ -120,7 +129,7 @@ public class GameScene : Scene
 
     public void NextLevelButtonAction()
     {
-        GameManager.instance.gameData.NextLevel(GameManager.instance.gameData.Goal + UnityEngine.Random.Range(5, 10), GameManager.instance.startingMoves);
+        GameManager.instance.gameData.NextLevel(GameManager.instance.gameData.Goal + Random.Range(5, 10), GameManager.instance.startingMoves);
         SceneManager.LoadScene(SceneName.Game.name());
     }
 

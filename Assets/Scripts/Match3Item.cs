@@ -1,39 +1,20 @@
 using System.Collections;
 using UnityEngine;
 
-public class Match3Item : MonoBehaviour
+public class Match3Part : Part
 {
-    public Match3ItemType itemType;
     public int xIndex;
     public int yIndex;
     public bool isMatched = false;
     public bool isMoving = false;
 
-    public Sprite[] partImages;
 
     public ParticleSystem matchParticlePrefab;
 
     public void Awake()
     {
-        // set a random item type
-        itemType = (Match3ItemType)Random.Range(0, partImages.Length);
-        GetComponent<SpriteRenderer>().sprite = GetImage();
-    }
-
-    private Sprite GetImage()
-    {
-        if ((int)itemType >= partImages.Length)
-        {
-            Debug.LogError("No image for item type " + itemType);
-            return null;
-        }
-        return partImages[(int)itemType];
-    }
-
-    public void SetType(Match3ItemType newType)
-    {
-        itemType = newType;
-        GetComponent<SpriteRenderer>().sprite = GetImage();
+        //todo: determine broken state
+        Init();
     }
 
     public void SetIndices(int x, int y)
@@ -105,13 +86,4 @@ public class Match3Item : MonoBehaviour
     }
 }
 
-public enum Match3ItemType
-{
-    Red,
-    Blue,
-    Green,
-    Yellow,
-    Purple,
-    White,
-    Pink
-}
+

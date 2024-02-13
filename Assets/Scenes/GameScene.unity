@@ -1792,6 +1792,80 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1090806312}
   m_CullTransparentMesh: 1
+--- !u!1001 &1110501057
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1599272746055668036, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_Size.x
+      value: 7.055002
+      objectReference: {fileID: 0}
+    - target: {fileID: 1599272746055668036, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_Size.y
+      value: 13.102573
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.1855
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622117512398071097, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_Name
+      value: GameBoardBackground
+      objectReference: {fileID: 0}
+    - target: {fileID: 7622117512398071097, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+--- !u!1 &1110501058 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7622117512398071097, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+  m_PrefabInstance: {fileID: 1110501057}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1133625936 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5462768661912208439, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
@@ -2824,6 +2898,7 @@ MonoBehaviour:
   goalPrefab: {fileID: 1133625936}
   scoreboardContainer: {fileID: 1519065040}
   steamPrefab: {fileID: 2494919065203531424, guid: 1b0e0100c1f247c76a89a5208bc3a004, type: 3}
+  partGoalPrefab: {fileID: 8221642854292705224, guid: 83d1a570055213e9a88b59cacf1f4e92, type: 3}
   settings: 0
 --- !u!4 &1700683228
 Transform:
@@ -3615,7 +3690,7 @@ MonoBehaviour:
   height: 8
   itemPrefab: {fileID: 37757434160022404, guid: 2351be9e4130476e786e016a7c2361b1, type: 3}
   gameBoardGO: {fileID: 2050507463}
-  backgroundPrefab: {fileID: 7622117512398071097, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+  background: {fileID: 1110501058}
   itemsToDestroy: []
   itemContainer: {fileID: 843035998}
   gameScene: {fileID: 1700683227}
@@ -3969,3 +4044,4 @@ SceneRoots:
   - {fileID: 347291640}
   - {fileID: 1645091032}
   - {fileID: 688949744}
+  - {fileID: 1110501057}
