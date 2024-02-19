@@ -416,18 +416,17 @@ public class Match3Board : MonoBehaviour
         return new MatchResult { connectedItems = connectedItems, direction = MatchDirection.None };
     }
 
-    void CheckDirection(Match3Part item, Vector2Int direction, List<Match3Part> connectedItems)
+    void CheckDirection(Match3Part part, Vector2Int direction, List<Match3Part> connectedItems)
     {
-        Match3ItemType itemType = item.itemType;
-        int x = item.xIndex + direction.x;
-        int y = item.yIndex + direction.y;
+        int x = part.xIndex + direction.x;
+        int y = part.yIndex + direction.y;
 
         while (x >= 0 && x < width && y >= 0 && y < height)
         {
             if (gameBoard.IsUsable(x, y))
             {
                 Match3Part neighborItem = gameBoard.GetValue(x, y);
-                if (!neighborItem.isMatched && neighborItem.itemType == itemType)
+                if (!neighborItem.isMatched && neighborItem.item.Equals(part.item))
                 {
                     connectedItems.Add(neighborItem);
                     x += direction.x;

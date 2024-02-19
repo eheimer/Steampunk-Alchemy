@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class GoalItem
+public class Match3Item
 {
-    public GoalItem(Match3ItemType itemType, bool broken)
+    public Match3Item(Match3ItemType itemType, bool broken)
     {
         ItemType = itemType;
         Broken = broken;
@@ -39,7 +38,7 @@ public class GoalItem
             return false;
         }
 
-        var other = (GoalItem)obj;
+        var other = (Match3Item)obj;
         return ItemType == other.ItemType && Broken == other.Broken;
     }
 

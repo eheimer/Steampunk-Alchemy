@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Part : MonoBehaviour
 {
-    public Match3ItemType itemType;
+    public Match3Item item;
     private Sprite[] partImages;
     private Sprite[] brokenImages;
     [SerializeField] public SpriteRenderer spriteRenderer;
@@ -17,20 +17,20 @@ public class Part : MonoBehaviour
         brokenImages = Resources.LoadAll<Sprite>("Sprites/BrokenPartImages");
     }
 
-    public void SetType(Match3ItemType newType, bool isBroken = false)
+    public void SetType(Match3Item itemType)
     {
-        itemType = newType;
-        spriteRenderer.sprite = GetImage(isBroken);
+        this.item = itemType;
+        spriteRenderer.sprite = GetImage(itemType.Broken);
     }
 
     protected Sprite GetImage(bool broken = false)
     {
-        if ((int)itemType >= partImages.Length)
+        if ((int)item.ItemType >= partImages.Length)
         {
-            Debug.LogError("No image for item type " + itemType);
+            Debug.LogError("No image for item type " + item);
             return null;
         }
-        return broken ? brokenImages[(int)itemType] : partImages[(int)itemType];
+        return broken ? brokenImages[(int)item.ItemType] : partImages[(int)item.ItemType];
     }
 
     /// <summary>
@@ -45,12 +45,12 @@ public class Part : MonoBehaviour
     {
         var values = System.Enum.GetValues(typeof(Match3ItemType));
         Match3ItemType randomItem = (Match3ItemType)values.GetValue(Random.Range(0, values.Length));
-        Init(randomItem, broken);
+        Init(new Match3Item(randomItem, broken));
     }
     /// <summary>
     /// Initializes the part with the specified type and broken state
     /// </summary>
     /// <param name="type"></param>
     /// <param name="broken"></param>
-    public virtual void Init(Match3ItemType type, bool broken) { SetType(type, broken); }
+    public virtual void Init(Match3Item itemType) { SetType(itemType); }
 }

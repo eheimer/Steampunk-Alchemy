@@ -8,23 +8,23 @@ public class GoalTracker : MonoBehaviour
 
     [SerializeField] private GameObject scoreboardContainer;
 
-    private Dictionary<GoalItem, GoalDisplay> goals = new Dictionary<GoalItem, GoalDisplay>();
+    private Dictionary<Match3Item, GoalDisplay> goals = new Dictionary<Match3Item, GoalDisplay>();
 
-    public void SetGoal(GoalItem goalItem, Vector3 location, int goal)
+    public void SetGoal(Match3Item item, Vector3 location, int goal)
     {
-        if (!goals.ContainsKey(goalItem))
+        if (!goals.ContainsKey(item))
         {
             GoalDisplay goalDisplay = Instantiate(goalDisplayPrefab, location, Quaternion.identity, transform);
-            goalDisplay.Init(goalItem.ItemType, goalItem.Broken, goal);
-            goals.Add(goalItem, goalDisplay);
+            goalDisplay.Init(item, goal);
+            goals.Add(item, goalDisplay);
         }
         else
         {
-            goals[goalItem].Goal = goal;
+            goals[item].Goal = goal;
         }
     }
 
-    public void ReduceGoal(GoalItem goalItem, int count)
+    public void ReduceGoal(Match3Item goalItem, int count)
     {
         if (goals.ContainsKey(goalItem))
         {
@@ -34,13 +34,13 @@ public class GoalTracker : MonoBehaviour
 
     public void ReduceGoal(Match3ItemType itemType, bool broken, int count)
     {
-        GoalItem goalItem = new GoalItem(itemType, broken);
+        Match3Item goalItem = new Match3Item(itemType, broken);
         ReduceGoal(goalItem, count);
     }
 
     public void ReduceGoal(Part part, int count)
     {
-        ReduceGoal(part.itemType, part.broken, count);
+        ReduceGoal(part.item, count);
     }
 
     public bool AllGoalsMet()

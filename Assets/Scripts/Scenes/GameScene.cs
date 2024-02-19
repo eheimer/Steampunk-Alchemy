@@ -31,7 +31,7 @@ public class GameScene : Scene
         //define the set of goals.  Each goal will consist of a Match3ItemType, whether or not it's broken, and a count.
         for (int i = 0; i < goalCount; i++)
         {
-            GoalItem goalItem = new GoalItem((Match3ItemType)i, false);
+            Match3Item goalItem = new Match3Item((Match3ItemType)i, false);
             goalTracker.SetGoal(goalItem, goalsGrid.GetCellCenter(i, 0), Random.Range(5, 30));
         }
 
