@@ -6,10 +6,16 @@ using UnityEngine;
 public class Part : MonoBehaviour
 {
     public Match3ItemType itemType;
-    [SerializeField] private Sprite[] partImages;
-    [SerializeField] private Sprite[] brokenImages;
+    private Sprite[] partImages;
+    private Sprite[] brokenImages;
     [SerializeField] public SpriteRenderer spriteRenderer;
     public bool broken = false;
+
+    private void Awake()
+    {
+        partImages = Resources.LoadAll<Sprite>("Sprites/PartImages");
+        brokenImages = Resources.LoadAll<Sprite>("Sprites/BrokenPartImages");
+    }
 
     public void SetType(Match3ItemType newType, bool isBroken = false)
     {
@@ -46,8 +52,5 @@ public class Part : MonoBehaviour
     /// </summary>
     /// <param name="type"></param>
     /// <param name="broken"></param>
-    public void Init(Match3ItemType type, bool broken) { SetType(type, broken); }
-
-
-
+    public virtual void Init(Match3ItemType type, bool broken) { SetType(type, broken); }
 }

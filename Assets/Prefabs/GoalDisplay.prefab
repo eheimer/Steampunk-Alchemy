@@ -264,7 +264,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2192460841152708266}
-  - component: {fileID: 8221642854292705224}
+  - component: {fileID: 7284234444432430149}
   m_Layer: 0
   m_Name: GoalDisplay
   m_TagString: Untagged
@@ -289,7 +289,7 @@ Transform:
   - {fileID: 1302019584805358670}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8221642854292705224
+--- !u!114 &7284234444432430149
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -298,17 +298,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 6326246796197263447}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6319b3574a0d6d76bd905b11d7f2304, type: 3}
+  m_Script: {fileID: 11500000, guid: e411ee13c3c039582a18b6fde695fb1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   itemType: 0
-  partImages:
-  - {fileID: 411785740, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
-  - {fileID: -1484054822, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
-  - {fileID: -207286385, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
-  - {fileID: -694918551, guid: eb4745482d18dc72bb789b75c67ebe63, type: 3}
-  brokenImages: []
   spriteRenderer: {fileID: 176721754081005597}
   broken: 0
-  goal: 0
   goalText: {fileID: 3587624966672869677}

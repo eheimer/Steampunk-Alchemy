@@ -11,9 +11,8 @@ public class Match3Part : Part
 
     public ParticleSystem matchParticlePrefab;
 
-    public void Awake()
+    public void Start()
     {
-        //todo: determine broken state
         Init();
     }
 

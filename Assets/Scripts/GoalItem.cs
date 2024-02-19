@@ -2,26 +2,49 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GoalItem : Part
+
+public class GoalItem
 {
-    public GoalItem(Match3ItemType type, bool broken, int goal)
+    public GoalItem(Match3ItemType itemType, bool broken)
     {
-        itemType = type;
-        this.broken = broken;
-        Goal = goal;
+        ItemType = itemType;
+        Broken = broken;
 
     }
-    public int goal;
-    public TMPro.TMP_Text goalText;
 
-    private int _goal;
-    public int Goal
+    private Match3ItemType _itemType;
+    public Match3ItemType ItemType
     {
-        get { return _goal; }
+        get { return _itemType; }
         set
         {
-            _goal = value;
-            goalText.text = value.ToString();
+            _itemType = value;
         }
+    }
+
+    private bool _broken;
+    public bool Broken
+    {
+        get { return _broken; }
+        set
+        {
+            _broken = value;
+        }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        var other = (GoalItem)obj;
+        return ItemType == other.ItemType && Broken == other.Broken;
+    }
+
+    public override int GetHashCode()
+    {
+        return System.Tuple.Create(ItemType, Broken).GetHashCode();
     }
 }

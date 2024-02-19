@@ -32,6 +32,8 @@ public class Match3Board : MonoBehaviour
     [SerializeField]
     Material hilight;
 
+    [SerializeField] private GoalTracker goalTracker;
+
     public ArrayLayout arrayLayout; // this is the layout of the board, true means unusable
     public static Match3Board Instance;
 
@@ -225,6 +227,7 @@ public class Match3Board : MonoBehaviour
         List<Coroutine> itemAnimations = new();
         foreach (Match3Part item in itemsToRemove)
         {
+            goalTracker.ReduceGoal(item, 1);
             itemAnimations.Add(StartCoroutine(item.YoureFired()));
         }
         if (GameManager.instance.gameData.Sound)

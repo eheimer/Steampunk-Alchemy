@@ -11,38 +11,32 @@ public class GameScene : Scene
     public GameObject gameBoardPanel;
     public GameObject victoryPanel;
     public GameObject failPanel;
-    public NamedValue movesPrefab;
-    public GameObject scoreboardContainer;
+    public NamedValue movesTracker;
+    public NamedValue scoreTracker;
     [SerializeField] private GameObject steamPrefab;
-    [SerializeField] private Part partGoalPrefab;
-
-    private int score;  // the player's score for this game board
-
-    private Dictionary<Match3ItemType, GoalItem> goalItems = new Dictionary<Match3ItemType, GoalItem>();
+    [SerializeField] private GoalTracker goalTracker;
 
     public bool settings;
 
     public Spinach.Grid<NamedValue> goalsGrid;
 
     public int movesPerLevel = 10;
-    public int movesRemaining = 10;
 
     protected override void Start()
     {
         base.Start();
-        goalsGrid = Spinach.Grid<NamedValue>.DockedGrid(4, 1, Spinach.DockPosition.Bottom, 1f);
-        goalItems.Clear();
-        for (int i = 0; i < System.Enum.GetNames(typeof(Match3ItemType)).Length; i++)
+        //determine how many goals we need to display for this level.  For now we'll hard-code it to 4.
+        int goalCount = 4;
+        goalsGrid = Spinach.Grid<NamedValue>.DockedGrid(goalCount, 1, Spinach.DockPosition.Bottom, 1f);
+        //define the set of goals.  Each goal will consist of a Match3ItemType, whether or not it's broken, and a count.
+        for (int i = 0; i < goalCount; i++)
         {
-            Match3ItemType type = (Match3ItemType)i;
-            Part goalItem = Instantiate(partGoalPrefab, goalsGrid.GetCellCenter(i, 0), Quaternion.identity, scoreboardContainer.transform);
-            goalItem.Init(type, false);
-            //goalItems.Add(type, new GoalItem(goalItem,false));
+            GoalItem goalItem = new GoalItem((Match3ItemType)i, false);
+            goalTracker.SetGoal(goalItem, goalsGrid.GetCellCenter(i, 0), Random.Range(5, 30));
         }
 
-        // determine moves based on gameData.Score
-        movesPrefab.Value = movesPerLevel;
-        movesRemaining = movesPerLevel;
+        movesTracker.Value = movesPerLevel;
+        scoreTracker.Value = 0;
     }
 
     public override bool HasMusic()
@@ -63,17 +57,23 @@ public class GameScene : Scene
     /// <returns>True if the level goal has been reached and the level is won. False otherwise.</returns>
     public bool ProcessTurn(int pointsToGain, bool subtractMoves)
     {
-        score += pointsToGain;
-        if (subtractMoves) movesRemaining--;
-        // check goals for this game board.
-        // if all goals are met, call WinLevel() and return true.
-        // if not, return false.
+        scoreTracker.Value += pointsToGain;
+        if (subtractMoves)
+        {
+            movesTracker.Value--;
+        }
+
+        if (goalTracker.AllGoalsMet())
+        {
+            WinLevel();
+            return true;
+        }
         return false;
     }
 
     public void CheckFail()
     {
-        if (movesRemaining <= 0) Fail();
+        if (movesTracker.Value <= 0) Fail();
     }
 
     private void WinLevel()
