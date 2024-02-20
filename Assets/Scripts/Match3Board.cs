@@ -211,9 +211,9 @@ public class Match3Board : MonoBehaviour
         }
         if (GameManager.instance.gameData.Sound)
         {
-            gameObject.GetComponent<AudioSource>().PlayOneShot(matchClip);
+            GameManager.instance.PlaySoundEffect(matchClip);
         }
-        StartCoroutine(Spinach.Utils.WaitAndExecute(.25f, () => RemoveAndRefill(itemsToRemove)));
+        StartCoroutine(Spinach.Utils.WaitAndExecute(.5f, () => RemoveAndRefill(itemsToRemove)));
 
         foreach (Coroutine itemAnimation in itemAnimations)
         {

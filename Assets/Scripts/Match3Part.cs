@@ -7,6 +7,7 @@ public class Match3Part : Part
     public int yIndex;
     public bool isMatched = false;
     public bool isMoving = false;
+    public AudioClip moveSound;
 
     public ParticleSystem matchParticlePrefab;
 
@@ -52,9 +53,10 @@ public class Match3Part : Part
         transform.localScale = startScale * 1.2f;
 
         // Wait for a random time between 0 and 0.5 seconds
-        float waitTime = Random.Range(0f, 0.25f);
+        float waitTime = Random.Range(0f, 0.5f);
         yield return new WaitForSeconds(waitTime);
 
+        GameManager.instance.PlaySoundEffect(moveSound);
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;

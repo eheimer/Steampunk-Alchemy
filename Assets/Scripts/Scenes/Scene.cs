@@ -25,16 +25,7 @@ public abstract class Scene : MonoBehaviour
         GameObject canvas = GameObject.Find("UI");
 
         Instantiate(settingsPrefab, canvas.transform);
-        AudioSource localSource = gameObject.GetComponent<AudioSource>();
-        // if (localSource == null)
-        // {
-        //     GameManager.instance.PlayMusic(GetMusic());
-        // }
-        // else
-        // {
-        localSource.clip = GetMusic();
-        localSource.Play();
-        // }
+        GameManager.instance.PlayMusic(GetMusic());
     }
 
     /// <summary>
