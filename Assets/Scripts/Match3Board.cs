@@ -44,13 +44,13 @@ public class Match3Board : MonoBehaviour
         Instance = this;
     }
 
+    private Vector2 touchStartPos, touchEndPos = default;
+
     void Start()
     {
         arrayLayout = new ArrayLayout(height, width);
         InitializeBoard();
     }
-
-    private Vector2 touchStartPos, touchEndPos = default;
 
     void Update()
     {
@@ -124,17 +124,12 @@ public class Match3Board : MonoBehaviour
 
     void InitializeBoard()
     {
+        Match3Item[,] items = new BoardDefinition(width, height).InitializeRandomBoard(false);
+
         if (gameBoard == null)
         {
             gameBoard = Spinach.Grid<Match3Part>.FitAndCenteredGrid(width, height);
             gameBoard.SetUsable(arrayLayout.ConvertToUsableArray());
-
-            // I'm finally starting to understand how Unity units work:
-            // the background sprite has been configured to have a border of .5 units on every side
-            // so the size needs to be the size of the grid +1 in each direction
-            // then the scale is set to the size of a cell
-            // we set the z position to 9.5 so that it's behind the items (which are at z = 9)
-            // GameObject background = Instantiate(backgroundPrefab, new Vector3(0, 1.5f, 9.5f), Quaternion.identity);
             background.transform.position = new Vector3(0, 1.5f, 9.5f);
             background.GetComponent<SpriteRenderer>().size = new Vector2((width + 1f), (height + 4.5f));
             background.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
@@ -145,16 +140,11 @@ public class Match3Board : MonoBehaviour
         {
             for (int x = 0; x < width; x++)
             {
-                Vector2 position = gameBoard.GetCellCenter(x, y);
                 if (gameBoard.IsUsable(x, y))
                 {
-                    SpawnItemAtTop(x);
+                    SpawnItemAtTop(x, items[x, y]);
                 }
             }
-        }
-        while (CheckBoard())
-        {
-            ReplaceMatchedItems();
         }
     }
 
@@ -209,17 +199,6 @@ public class Match3Board : MonoBehaviour
             }
         }
         return hasMatched;
-    }
-
-    // this is done during board set up, so we start with a board that has no matches
-    public void ReplaceMatchedItems()
-    {
-        foreach (Match3Part item in itemsToRemove)
-        {
-            item.isMatched = false;
-            Destroy(item.gameObject);
-        }
-        RemoveAndRefill(itemsToRemove);
     }
 
     public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
@@ -321,10 +300,17 @@ public class Match3Board : MonoBehaviour
         }
     }
 
-    private void SpawnItemAtTop(int x)
+    private void SpawnItemAtTop(int x, Match3Item item = null)
     {
         Match3Part newItem = Instantiate(itemPrefab, gameBoard.GetCellCenter(x, height), Quaternion.identity);
-        newItem.Init();
+        if (item != null)
+        {
+            newItem.Init(item);
+        }
+        else
+        {
+            newItem.Init();
+        }
 
         newItem.transform.localScale = new Vector3(gameBoard.GetCellSize(), gameBoard.GetCellSize(), 1);
 
@@ -494,7 +480,6 @@ public class MatchResult
 {
     public List<Match3Part> connectedItems;
     public MatchDirection direction;
-
 }
 
 public enum MatchDirection

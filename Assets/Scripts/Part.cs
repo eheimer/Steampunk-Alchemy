@@ -9,7 +9,6 @@ public class Part : MonoBehaviour
     private Sprite[] partImages;
     private Sprite[] brokenImages;
     [SerializeField] public SpriteRenderer spriteRenderer;
-    public bool broken = false;
 
     private void Awake()
     {
@@ -20,17 +19,17 @@ public class Part : MonoBehaviour
     public void SetType(Match3Item itemType)
     {
         this.item = itemType;
-        spriteRenderer.sprite = GetImage(itemType.Broken);
+        spriteRenderer.sprite = GetImage();
     }
 
-    protected Sprite GetImage(bool broken = false)
+    protected Sprite GetImage()
     {
         if ((int)item.ItemType >= partImages.Length)
         {
             Debug.LogError("No image for item type " + item);
             return null;
         }
-        return broken ? brokenImages[(int)item.ItemType] : partImages[(int)item.ItemType];
+        return this.item.Broken ? brokenImages[(int)item.ItemType] : partImages[(int)item.ItemType];
     }
 
     /// <summary>

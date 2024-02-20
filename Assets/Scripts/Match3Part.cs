@@ -8,13 +8,7 @@ public class Match3Part : Part
     public bool isMatched = false;
     public bool isMoving = false;
 
-
     public ParticleSystem matchParticlePrefab;
-
-    public void Start()
-    {
-        Init();
-    }
 
     public void SetIndices(int x, int y)
     {
