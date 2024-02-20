@@ -32,6 +32,12 @@ public class SettingsHandler : MonoBehaviour
         SceneManager.LoadScene(SceneName.Start.name());
     }
 
+    public void SettingsResetButtonAction()
+    {
+        GameManager.instance.gameData.ResetExperience();
+        SceneManager.LoadScene(SceneName.Start.name());
+    }
+
     public void ToggleMusicAction()
     {
         GameManager.instance.gameData.ToggleMusic();

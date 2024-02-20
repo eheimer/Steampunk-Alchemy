@@ -32,7 +32,7 @@ public class GameScene : Scene
         for (int i = 0; i < goalCount; i++)
         {
             Match3Item goalItem = new Match3Item((Match3ItemType)i, false);
-            goalTracker.SetGoal(goalItem, goalsGrid.GetCellCenter(i, 0), Random.Range(5, 30));
+            goalTracker.SetGoal(goalItem, goalsGrid.GetCellCenter(i, 0), Random.Range(5, 20));
         }
 
         movesTracker.Value = movesPerLevel;
@@ -78,10 +78,10 @@ public class GameScene : Scene
 
     private void WinLevel()
     {
+        GameManager.instance.gameData.AddExperience(scoreTracker.Value);
         GameManager.instance.StopMusic();
         GameManager.instance.PlaySoundEffect(victoryClip);
         gameBoardPanel.SetActive(false);
-        //victoryLevel.text = GameManager.instance.gameData.Level.ToString();
         victoryPanel.SetActive(true);
         return;
     }
@@ -91,12 +91,6 @@ public class GameScene : Scene
         GameManager.instance.StopMusic();
         GameManager.instance.PlayMusic(failClip);
         gameBoardPanel.SetActive(false);
-        //gameOverLevel.text = GameManager.instance.gameData.Level.ToString();
-        //gameOverScore.text = GameManager.instance.gameData.Score.ToString();
-        // gameOverBestLevel.text = GameManager.instance.gameData.BestLevel.ToString();
-        // gameOverBestScore.text = GameManager.instance.gameData.BestScore.ToString();
-
-        //GameManager.instance.gameData.GameOver();
         failPanel.SetActive(true);
         return;
     }

@@ -23,10 +23,20 @@ public class GameData
     // Score is the player's running total.  This is treated like experience.
     // Each game board will be constructed based on the player's score.
     // If the player fails to meet the goals, the score is not updated.
-    public int Score
+    public int Experience
     {
-        get { return GetInt("Score", 0); }
-        private set { SetInt("Score", value); }
+        get { return GetInt("Experience", 0); }
+        private set { SetInt("Experience", value); }
+    }
+
+    public void AddExperience(int value)
+    {
+        Experience += value;
+    }
+
+    public void ResetExperience()
+    {
+        Experience = 0;
     }
 
     public bool Music
