@@ -166,10 +166,10 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -415,7 +415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPrefab: {fileID: 3341840725063979232, guid: 31926cad6fde052e1bb26dfc6d41463a, type: 3}
-  startMusic: {fileID: 8300000, guid: 97aa641b53b98af1a9f5cfd38ccc5a29, type: 3}
+  startMusic: {fileID: 8300000, guid: d0467513f43ea7c8d984a812fc399e99, type: 3}
   experienceText: {fileID: 211835540}
   proceedSound: {fileID: 8300000, guid: 0378544486ec6c2408130232e4727a87, type: 3}
 --- !u!4 &335307176
