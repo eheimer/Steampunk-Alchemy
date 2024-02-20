@@ -1001,7 +1001,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1329,8 +1329,8 @@ Transform:
   m_GameObject: {fileID: 749710672}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 37.5, y: 37.5, z: 37.5}
+  m_LocalPosition: {x: -51, y: -29, z: 0}
+  m_LocalScale: {x: 23.34225, y: 23.34225, z: 23.34225}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 347291640}
@@ -1376,8 +1376,8 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 70ca6eeb540da36acbbdcb53381ba02c, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Sprite: {fileID: 21300000, guid: 35d818cd808f36f1eb488b9b9a97965f, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.5764706}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -2929,11 +2929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   settingsPrefab: {fileID: 3341840725063979232, guid: 31926cad6fde052e1bb26dfc6d41463a, type: 3}
   levelMusic:
-  - {fileID: 8300000, guid: 0af3040014cff7a4f9c4c64d7de30631, type: 3}
-  - {fileID: 8300000, guid: ca340bbdea163a840b1141ccea7b79a3, type: 3}
-  - {fileID: 8300000, guid: a13de6467f1ec8b469cdf57c3723f0ba, type: 3}
-  - {fileID: 8300000, guid: 919e489802e474f4da781931cf999f04, type: 3}
-  - {fileID: 8300000, guid: 858f54c8ca3d9cd408b6a8d938724ef7, type: 3}
+  - {fileID: 8300000, guid: 482262891af2f71c983a5ab727b5da3a, type: 3}
   victoryClip: {fileID: 0}
   failClip: {fileID: 0}
   gameBoardPanel: {fileID: 2050507463}
@@ -2972,9 +2968,9 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.157
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -3743,7 +3739,7 @@ MonoBehaviour:
   isProcessingMove: 0
   itemsToRemove: []
   matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
-  matchClip: {fileID: 8300000, guid: 6fb4252918c27f44e833a7bdd3ac8da5, type: 3}
+  matchClip: {fileID: 8300000, guid: cbfe5225abffb6606bf10e3b2d008972, type: 3}
   hilight: {fileID: 2100000, guid: 8451274a85c05ffc08badf972283d3ed, type: 2}
   goalTracker: {fileID: 454382298}
   arrayLayout:
