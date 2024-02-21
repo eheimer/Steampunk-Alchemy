@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +15,9 @@ public class GameScene : Scene
     public NamedValue scoreTracker;
     [SerializeField] private GameObject steamPrefab;
     [SerializeField] private GoalTracker goalTracker;
+    [SerializeField] private TMP_Text victoryScoreText;
+    [SerializeField] private TMP_Text victoryExpNeededText;
+    [SerializeField] private GameObject promotionText;
 
     public bool settings;
 
@@ -25,17 +28,16 @@ public class GameScene : Scene
     protected override void Start()
     {
         base.Start();
+        GameData.LevelDefinition level = GameManager.instance.gameData.GetLevelDefinition();
+        movesTracker.Value = level.moves;
         //determine how many goals we need to display for this level.  For now we'll hard-code it to 4.
-        int goalCount = 4;
+        int goalCount = level.goals.Count;
         goalsGrid = Spinach.Grid<NamedValue>.DockedGrid(goalCount, 1, Spinach.DockPosition.Bottom, 1f);
-        //define the set of goals.  Each goal will consist of a Match3ItemType, whether or not it's broken, and a count.
         for (int i = 0; i < goalCount; i++)
         {
-            Match3Item goalItem = new Match3Item((Match3ItemType)i, false);
-            goalTracker.SetGoal(goalItem, goalsGrid.GetCellCenter(i, 0), Random.Range(5, 20));
+            Match3Item goalItem = level.goals.Keys.ElementAt(i);
+            goalTracker.SetGoal(goalItem, goalsGrid.GetCellCenter(i, 0), level.goals[goalItem]);
         }
-
-        movesTracker.Value = movesPerLevel;
         scoreTracker.Value = 0;
     }
 
@@ -78,8 +80,11 @@ public class GameScene : Scene
 
     private void WinLevel()
     {
+        scoreTracker.Value += movesTracker.Value * 5;
+        promotionText.SetActive(GameManager.instance.gameData.EarnPromotion(scoreTracker.Value));
+        victoryScoreText.text = scoreTracker.Value.ToString();
         GameManager.instance.gameData.AddExperience(scoreTracker.Value);
-        GameManager.instance.StopMusic();
+        victoryExpNeededText.text = GameManager.instance.gameData.ExpToNextLevel().ToString();
         GameManager.instance.PlaySoundEffect(victoryClip);
         gameBoardPanel.SetActive(false);
         victoryPanel.SetActive(true);
@@ -88,8 +93,7 @@ public class GameScene : Scene
 
     private void Fail()
     {
-        GameManager.instance.StopMusic();
-        GameManager.instance.PlayMusic(failClip);
+        GameManager.instance.PlaySoundEffect(failClip);
         gameBoardPanel.SetActive(false);
         failPanel.SetActive(true);
         return;
