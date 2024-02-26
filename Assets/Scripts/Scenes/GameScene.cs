@@ -62,7 +62,7 @@ public class GameScene : Scene
         scoreTracker.Value += pointsToGain;
         if (subtractMoves)
         {
-            movesTracker.Value--;
+            movesTracker.Change(movesTracker.Value - 1);
         }
 
         if (goalTracker.AllGoalsMet())
