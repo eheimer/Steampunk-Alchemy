@@ -9,7 +9,7 @@ public class Match3Part : Part
     public bool isMoving = false;
     public AudioClip moveSound;
 
-    public ParticleSystem matchParticlePrefab;
+    //public ParticleSystem matchParticlePrefab;
 
     public void SetIndices(int x, int y)
     {
@@ -17,9 +17,9 @@ public class Match3Part : Part
         yIndex = y;
     }
 
-    public void MoveToTarget(Vector3 targetPos)
+    public IEnumerator MoveToTarget(Vector3 targetPos)
     {
-        StartCoroutine(MoveCoroutine(targetPos));
+        yield return StartCoroutine(MoveCoroutine(targetPos));
     }
 
     private IEnumerator MoveCoroutine(Vector3 targetPos)
@@ -52,9 +52,8 @@ public class Match3Part : Part
         // Instantly scale up
         transform.localScale = startScale * 1.2f;
 
-        // Wait for a random time between 0 and 0.5 seconds
-        float waitTime = Random.Range(0f, 0.5f);
-        yield return new WaitForSeconds(waitTime);
+        // Wait before moving the parts
+        yield return new WaitForSeconds(.25f);
 
         GameManager.instance.PlaySoundEffect(moveSound);
         while (elapsedTime < duration)
@@ -75,8 +74,6 @@ public class Match3Part : Part
         transform.position = targetPosition;
         transform.localScale = targetScale;
 
-        // Continue with your explosion effect and destruction of the game object
-        Instantiate(matchParticlePrefab, transform.position, Quaternion.identity);
         Destroy(gameObject);
     }
 }

@@ -9,22 +9,34 @@ public class SettingsHandler : MonoBehaviour
     public Toggle musicToggle;
     public Toggle soundToggle;
 
+    private GameScene gameScene;
+    private void Start()
+    {
+        gameScene = FindObjectOfType<GameScene>();
+    }
+
     public void SettingsButtonAction()
     {
+        if (gameScene != null)
+        {
+            gameScene.StateMachine.ChangeState(GameState.Menu);
+        }
+
         // set up the panel so that it shows the current settings
         musicToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Music);
         soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Sound);
         button.SetActive(false);
         panel.SetActive(true);
-        //disable swipes on the Match3Board while the settings panel is open
-        Match3Board.Instance.ignoreInput = true;
     }
 
     public void SettingsCloseButtonAction()
     {
         button.SetActive(true);
         panel.SetActive(false);
-        Match3Board.Instance.ignoreInput = false;
+        if (gameScene != null)
+        {
+            gameScene.StateMachine.ChangeState(GameState.Idle);
+        }
     }
 
     public void SettinsQuitButtonAction()

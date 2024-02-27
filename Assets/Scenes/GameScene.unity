@@ -179,6 +179,10 @@ PrefabInstance:
       propertyPath: m_text
       value: PARTS
       objectReference: {fileID: 0}
+    - target: {fileID: 5462768661912208439, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
+      propertyPath: updateAnimation
+      value: 
+      objectReference: {fileID: 9100000, guid: dbfcfec0f274528eb9eae906894e6822, type: 2}
     - target: {fileID: 7358570218905045222, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
       propertyPath: m_Name
       value: Score

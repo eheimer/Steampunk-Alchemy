@@ -56,11 +56,13 @@ public class NamedValue : MonoBehaviour
             if (animateDuplicate)
             {
                 text = Instantiate(valueText, valueText.transform.parent);
-                //text.text = Value.ToString();
             }
-            Animator animation = text.gameObject.AddComponent<Animator>();
+            Animator animation = text.gameObject.GetComponent<Animator>();
+            if (animation == null)
+            {
+                animation = text.gameObject.AddComponent<Animator>();
+            }
             animation.runtimeAnimatorController = updateAnimation;
-            animation.SetTrigger("Update");
         }
         Value = value;
     }

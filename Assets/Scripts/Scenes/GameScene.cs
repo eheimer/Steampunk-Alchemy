@@ -1,9 +1,23 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Openworld.Scenes;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameScene : Scene
+public enum GameState
+{
+    Building, // building the board
+    Idle, // waiting for player input
+    Checking, // player input has been received, verifying valid move
+    Matching, // cascading matches are being processed
+    Win, // player has completed all objectives
+    Fail, // player has run out of moves
+    Menu, // player is in the menu
+}
+
+public class GameScene : StatefulScene<GameState>
 {
     public AudioClip[] levelMusic;
     public AudioClip victoryClip;
@@ -57,30 +71,30 @@ public class GameScene : Scene
     /// <param name="pointsToGain">The number of points to add to the score for this turn.</param>
     /// <param name="subtractMoves">If true, subtracts a move from the remaining moves. If false, the number of moves remains the same.</param>
     /// <returns>True if the level goal has been reached and the level is won. False otherwise.</returns>
-    public bool ProcessTurn(int pointsToGain, bool subtractMoves)
+    public void ProcessTurn(int pointsToGain)
     {
-        scoreTracker.Value += pointsToGain;
-        if (subtractMoves)
+        scoreTracker.Change(scoreTracker.Value + pointsToGain);
+    }
+
+    public bool CheckWin()
+    {
+        return goalTracker.AllGoalsMet();
+    }
+
+    public bool CheckFail()
+    {
+        return movesTracker.Value <= 0;
+    }
+
+    private IEnumerator WinLevel()
+    {
+        while (movesTracker.Value > 0)
         {
             movesTracker.Change(movesTracker.Value - 1);
+            scoreTracker.Change(scoreTracker.Value + 5);
+            yield return new WaitForSeconds(.25f);
         }
-
-        if (goalTracker.AllGoalsMet())
-        {
-            WinLevel();
-            return true;
-        }
-        return false;
-    }
-
-    public void CheckFail()
-    {
-        if (movesTracker.Value <= 0) Fail();
-    }
-
-    private void WinLevel()
-    {
-        scoreTracker.Value += movesTracker.Value * 5;
+        yield return new WaitForSeconds(1f);
         promotionText.SetActive(GameManager.instance.gameData.EarnPromotion(scoreTracker.Value));
         victoryScoreText.text = scoreTracker.Value.ToString();
         GameManager.instance.gameData.AddExperience(scoreTracker.Value);
@@ -88,7 +102,6 @@ public class GameScene : Scene
         GameManager.instance.PlaySoundEffect(victoryClip);
         gameBoardPanel.SetActive(false);
         victoryPanel.SetActive(true);
-        return;
     }
 
     private void Fail()
@@ -109,5 +122,56 @@ public class GameScene : Scene
     public void RestartButtonAction()
     {
         SceneManager.LoadScene(SceneName.Start.name());
+    }
+
+    protected override GameState GetInitialState()
+    {
+        return GameState.Building;
+    }
+
+    protected override Dictionary<GameState, List<GameState>> GetStateTransitions()
+    {
+        return new Dictionary<GameState, List<GameState>>
+        {
+            { GameState.Building, new List<GameState> { GameState.Idle } },
+            { GameState.Idle, new List<GameState> { GameState.Checking, GameState.Menu } },
+            { GameState.Checking, new List<GameState> { GameState.Matching, GameState.Idle } },
+            { GameState.Matching, new List<GameState> { GameState.Idle, GameState.Win, GameState.Fail } },
+            { GameState.Menu, new List<GameState> { GameState.Idle } }
+        };
+    }
+
+    protected override void HandleEnterStateLocal(GameState previousState, GameState newState)
+    {
+        switch (newState)
+        {
+            case GameState.Building:
+                break;
+            case GameState.Idle:
+                Match3Board.Instance.WaitForInput();
+                break;
+            case GameState.Checking:
+                StartCoroutine(Match3Board.Instance.ValidateSwap());
+                break;
+            case GameState.Matching:
+                movesTracker.Change(movesTracker.Value - 1);
+                StartCoroutine(Match3Board.Instance.ProcessTurnOnMatchedBoard());
+                break;
+            case GameState.Win:
+                StartCoroutine(WinLevel());
+                break;
+            case GameState.Fail:
+                Fail();
+                break;
+            case GameState.Menu:
+                break;
+            default:
+                throw new System.NotImplementedException();
+        }
+    }
+
+    protected override void HandleExitStateLocal(GameState previousState, GameState newState)
+    {
+
     }
 }

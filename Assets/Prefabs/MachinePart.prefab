@@ -52,7 +52,7 @@ MonoBehaviour:
   isMatched: 0
   isMoving: 0
   moveSound: {fileID: 8300000, guid: cbfe5225abffb6606bf10e3b2d008972, type: 3}
-  matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
+  matchParticlePrefab: {fileID: 0}
 --- !u!212 &7753099647871579110
 SpriteRenderer:
   m_ObjectHideFlags: 0

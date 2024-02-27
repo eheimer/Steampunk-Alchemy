@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Spinach;
+using Unity.VisualScripting;
 
 public class Match3Board : MonoBehaviour
 {
@@ -21,8 +22,8 @@ public class Match3Board : MonoBehaviour
     private Match3Part selectedItem;
     private Match3Part swapItem;
 
-    [SerializeField]
-    private bool isProcessingMove;
+    // [SerializeField]
+    // private bool isProcessingMove;
     [SerializeField]
     List<Match3Part> itemsToRemove = new();
 
@@ -37,7 +38,7 @@ public class Match3Board : MonoBehaviour
     public ArrayLayout arrayLayout; // this is the layout of the board, true means unusable
     public static Match3Board Instance;
 
-    public bool ignoreInput = false;
+    // public bool ignoreInput = false;
 
     private void Awake()
     {
@@ -50,15 +51,18 @@ public class Match3Board : MonoBehaviour
     {
         arrayLayout = new ArrayLayout(height, width);
         InitializeBoard();
+        gameScene.StateMachine.ChangeState(GameState.Idle);
     }
 
     void Update()
     {
-        if (!isProcessingMove & !ignoreInput)
+        if (gameScene.StateMachine.CurrentState == GameState.Idle)
         {
             if (Input.touchCount > 0 || Input.GetMouseButtonDown(0) || Input.GetMouseButtonUp(0))
+            // touch event detected
             {
                 if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || Input.GetMouseButtonDown(0))
+                // swipe start detected
                 {
                     Ray ray = Camera.main.ScreenPointToRay(Input.touchCount > 0 ? Input.GetTouch(0).position : Input.mousePosition);
                     RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction);
@@ -71,6 +75,7 @@ public class Match3Board : MonoBehaviour
                     }
                 }
                 if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Ended) || Input.GetMouseButtonUp(0))
+                // swipe end detected
                 {
                     if (touchStartPos == default || selectedItem == default) return;
                     touchEndPos = Input.touchCount > 0 ? (Vector2)Input.GetTouch(0).position : (Vector2)Input.mousePosition;
@@ -87,7 +92,7 @@ public class Match3Board : MonoBehaviour
 
                     touchStartPos = touchEndPos = default;
 
-                    Match3Part swapItem = null;
+                    swapItem = null;
                     if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
                     {
                         if (swipeDirection.x > 0)
@@ -112,14 +117,22 @@ public class Match3Board : MonoBehaviour
                     }
                     if (swapItem != null)
                     {
-                        StartProcessingMove();
-                        SwapItem(swapItem, selectedItem);
+                        selectedItem.gameObject.GetComponent<SpriteRenderer>().material = new Material(Shader.Find("Sprites/Default"));
+                        gameScene.StateMachine.ChangeState(GameState.Checking);
                     }
-                    selectedItem.gameObject.GetComponent<SpriteRenderer>().material = new Material(Shader.Find("Sprites/Default"));
-                    selectedItem = null;
                 }
             }
         }
+    }
+
+    /// <summary>
+    /// This is called by the state machine to reset input selections
+    /// </summary>
+    public void WaitForInput()
+    {
+        selectedItem = null;
+        swapItem = null;
+        touchStartPos = touchEndPos = default;
     }
 
     void InitializeBoard()
@@ -201,7 +214,7 @@ public class Match3Board : MonoBehaviour
         return hasMatched;
     }
 
-    public IEnumerator ProcessTurnOnMatchedBoard(bool subtractMoves)
+    public IEnumerator ProcessTurnOnMatchedBoard()
     {
         List<Coroutine> itemAnimations = new();
         foreach (Match3Part item in itemsToRemove)
@@ -223,39 +236,27 @@ public class Match3Board : MonoBehaviour
         {
             item.isMatched = false;
         }
-        var win = gameScene.ProcessTurn(itemsToRemove.Count, subtractMoves);
+        gameScene.ProcessTurn(itemsToRemove.Count);
 
         if (CheckBoard())
         {
-            StartCoroutine(ProcessTurnOnMatchedBoard(false));
+            StartCoroutine(ProcessTurnOnMatchedBoard());
         }
         else
         {
-            if (!win) gameScene.CheckFail();
-            EndProcessingMove();
+            if (gameScene.CheckWin())
+            {
+                gameScene.StateMachine.ChangeState(GameState.Win);
+            }
+            else if (gameScene.CheckFail())
+            {
+                gameScene.StateMachine.ChangeState(GameState.Fail);
+            }
+            else
+            {
+                gameScene.StateMachine.ChangeState(GameState.Idle);
+            }
         }
-    }
-
-    private void StartProcessingMove()
-    {
-        if (isProcessingMove)
-        {
-            Debug.LogError("Attempted to start a new move while a move is already processing.");
-            return;
-        }
-
-        isProcessingMove = true;
-    }
-
-    private void EndProcessingMove()
-    {
-        if (!isProcessingMove)
-        {
-            Debug.LogError("Attempted to end a move, but no move is currently processing.");
-            return;
-        }
-
-        isProcessingMove = false;
     }
 
     #region Cascading Matches
@@ -289,7 +290,7 @@ public class Match3Board : MonoBehaviour
             // we've found an item
             Match3Part itemAbove = gameBoard.GetValue(x, y + yOffset);
             Vector3 targetPos = gameBoard.GetCellCenter(x, y);
-            itemAbove.MoveToTarget(targetPos);
+            StartCoroutine(itemAbove.MoveToTarget(targetPos));
             itemAbove.SetIndices(x, y);
             gameBoard.SetValue(x, y, gameBoard.GetValue(x, y + yOffset));
             gameBoard.SetValue(x, y + yOffset, null);
@@ -319,7 +320,7 @@ public class Match3Board : MonoBehaviour
         newItem.transform.SetParent(itemContainer.transform, false);
         Vector3 targetPosition = gameBoard.GetCellCenter(x, index);
         newItem.SetIndices(x, index);
-        newItem.MoveToTarget(targetPosition);
+        StartCoroutine(newItem.MoveToTarget(targetPosition));
     }
 
     private int FindIndexOfLowestNull(int x)
@@ -429,14 +430,7 @@ public class Match3Board : MonoBehaviour
 
     #region Swapping Items
 
-    private void SwapItem(Match3Part current, Match3Part target)
-    {
-        DoSwap(current, target);
-
-        StartCoroutine(ProcessMatches(current, target));
-    }
-
-    private void DoSwap(Match3Part current, Match3Part target)
+    private IEnumerator DoSwap(Match3Part current, Match3Part target)
     {
         Match3Part temp = gameBoard.GetValue(current.xIndex, current.yIndex);
 
@@ -449,8 +443,13 @@ public class Match3Board : MonoBehaviour
         current.SetIndices(target.xIndex, target.yIndex);
         target.SetIndices(tempX, tempY);
 
-        current.MoveToTarget(gameBoard.GetValue(target.xIndex, target.yIndex).transform.position);
-        target.MoveToTarget(gameBoard.GetValue(current.xIndex, current.yIndex).transform.position);
+        StartCoroutine(current.MoveToTarget(gameBoard.GetValue(target.xIndex, target.yIndex).transform.position));
+        StartCoroutine(target.MoveToTarget(gameBoard.GetValue(current.xIndex, current.yIndex).transform.position));
+
+        while (current.isMoving || target.isMoving)
+        {
+            yield return null;
+        }
     }
 
     private bool IsAdjacent(Match3Part current, Match3Part target)
@@ -459,17 +458,18 @@ public class Match3Board : MonoBehaviour
     }
 
     // this happens only once per turn.  If the swap results in a match, we process the matches.  If not, we swap back.
-    private IEnumerator ProcessMatches(Match3Part current, Match3Part target)
+    public IEnumerator ValidateSwap()
     {
-        yield return new WaitForSeconds(0.2f);
+        yield return StartCoroutine(DoSwap(selectedItem, swapItem));
         if (CheckBoard())
         {
-            StartCoroutine(ProcessTurnOnMatchedBoard(true));
+            gameScene.StateMachine.ChangeState(GameState.Matching);
         }
         else
         {
-            DoSwap(current, target);
-            EndProcessingMove();
+            //undo swap
+            yield return StartCoroutine(DoSwap(swapItem, selectedItem));
+            gameScene.StateMachine.ChangeState(GameState.Idle);
         }
     }
 
