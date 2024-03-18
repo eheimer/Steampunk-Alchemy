@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: eb4745482d18dc72bb789b75c67ebe63
+guid: 1f3033fed517a0b8fb495ffb3b7225e5
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -136,7 +136,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: parts_master-512_0
+      name: mechanical_pieces_spritesheet_master-_512(1)_0
       rect:
         serializedVersion: 2
         x: 0
@@ -150,14 +150,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 607d8eed7a54d62ac81ff803981264ab
-      internalID: 411785740
+      spriteID: 13002acdb859f9e458ccf8acb0d732b1
+      internalID: -1649781836
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: parts_master-512_1
+      name: mechanical_pieces_spritesheet_master-_512(1)_1
       rect:
         serializedVersion: 2
         x: 512
@@ -171,14 +171,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0218e822ba8b60ae6b33e45af340f8e2
-      internalID: -1484054822
+      spriteID: 6d55c47d971bdc561a2b291ddb64951d
+      internalID: -168233425
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: parts_master-512_2
+      name: mechanical_pieces_spritesheet_master-_512(1)_2
       rect:
         serializedVersion: 2
         x: 1024
@@ -192,14 +192,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f470e587f0b2247a299634379b53bb52
-      internalID: -207286385
+      spriteID: 5ab5e046428604c67b8d30824af14733
+      internalID: 861290778
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: parts_master-512_3
+      name: mechanical_pieces_spritesheet_master-_512(1)_3
       rect:
         serializedVersion: 2
         x: 1536
@@ -213,8 +213,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e3a275da8c67bfb1c9788937b62627f8
-      internalID: -694918551
+      spriteID: c19b1b526c4ffda4a8b5f2c7452e53fe
+      internalID: -1721623460
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: mechanical_pieces_spritesheet_master-_512(1)_4
+      rect:
+        serializedVersion: 2
+        x: 2048
+        y: 0
+        width: 512
+        height: 512
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7ffd4e7490a6822fd8a8bd4f081fcb4b
+      internalID: 1545369259
       vertices: []
       indices: 
       edges: []
@@ -230,10 +251,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      parts_master-512_0: 411785740
-      parts_master-512_1: -1484054822
-      parts_master-512_2: -207286385
-      parts_master-512_3: -694918551
+      mechanical_pieces_spritesheet_master-_512(1)_0: -1649781836
+      mechanical_pieces_spritesheet_master-_512(1)_1: -168233425
+      mechanical_pieces_spritesheet_master-_512(1)_2: 861290778
+      mechanical_pieces_spritesheet_master-_512(1)_3: -1721623460
+      mechanical_pieces_spritesheet_master-_512(1)_4: 1545369259
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

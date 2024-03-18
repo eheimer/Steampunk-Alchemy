@@ -183,11 +183,16 @@ PrefabInstance:
       propertyPath: updateAnimation
       value: 
       objectReference: {fileID: 9100000, guid: dbfcfec0f274528eb9eae906894e6822, type: 2}
+    - target: {fileID: 5462768661912208439, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
+      propertyPath: animateDuplicate
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7358570218905045222, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
       propertyPath: m_Name
       value: Score
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2217168306337824505, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1503,6 +1508,10 @@ PrefabInstance:
       propertyPath: m_Size.y
       value: 13.102573
       objectReference: {fileID: 0}
+    - target: {fileID: 1599272746055668036, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9f96f4dde30644f1897f813b38a3e105, type: 3}
     - target: {fileID: 5777296826847544684, guid: 8701fa3361e9d42f19b70be055b62a05, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.01
@@ -2612,7 +2621,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1519065040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 9}
+  m_LocalPosition: {x: 0, y: 0, z: 8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3137,6 +3146,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1519065041}
     m_Modifications:
+    - target: {fileID: 56878363023657226, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1014078104970207297, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.925
@@ -3177,22 +3190,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1489428953188182029, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
-      propertyPath: m_fontColor.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1489428953188182029, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
-      propertyPath: m_fontColor32.rgba
-      value: 4294967295
-      objectReference: {fileID: 0}
-    - target: {fileID: 5462768661912208439, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
-      propertyPath: updateAnimation
-      value: 
-      objectReference: {fileID: 9100000, guid: bd5418dcbac8306f4ade09f5e9775ed3, type: 2}
-    - target: {fileID: 5462768661912208439, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
-      propertyPath: animateDuplicate
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7358570218905045222, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
       propertyPath: m_Name
       value: Moves
@@ -3204,9 +3201,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 917940462640272509, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
-    - targetCorrespondingSourceObject: {fileID: 1874369440000712481, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1926539579}
     - targetCorrespondingSourceObject: {fileID: 1874369440000712481, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
       insertIndex: -1
       addedObject: {fileID: 0}
@@ -3225,23 +3219,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 147ca04c94bf0ed4db675ec6a47cc2b0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &1926539574 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1874369440000712481, guid: 3c661c4f3aa23fb1498c959cd6ebac62, type: 3}
-  m_PrefabInstance: {fileID: 1926539571}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1926539579
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1926539574}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9151fd0551e7afc159dc80e550ea3e6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1935766029
@@ -3714,7 +3691,6 @@ MonoBehaviour:
   itemContainer: {fileID: 843035998}
   gameScene: {fileID: 1700683227}
   selectedItem: {fileID: 0}
-  isProcessingMove: 0
   itemsToRemove: []
   matchParticlePrefab: {fileID: 4685952730320251140, guid: 2eb228c0f66898e17b31a1ba8492d9a7, type: 3}
   matchClip: {fileID: 8300000, guid: 4156bfbdb6e1b0592bf062ab660f2530, type: 3}
@@ -3730,7 +3706,6 @@ MonoBehaviour:
     - row: 000000000000
     - row: 000000000000
     - row: 000000000000
-  ignoreInput: 0
 --- !u!114 &2050507468
 MonoBehaviour:
   m_ObjectHideFlags: 0

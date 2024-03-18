@@ -8,6 +8,7 @@ public enum Match3ItemType
     Red,
     Green,
     Yellow,
+    Purple,
 }
 
 

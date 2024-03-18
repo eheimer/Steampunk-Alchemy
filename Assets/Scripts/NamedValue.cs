@@ -63,6 +63,7 @@ public class NamedValue : MonoBehaviour
                 animation = text.gameObject.AddComponent<Animator>();
             }
             animation.runtimeAnimatorController = updateAnimation;
+            animation.SetTrigger("ChangeValue");
         }
         Value = value;
     }

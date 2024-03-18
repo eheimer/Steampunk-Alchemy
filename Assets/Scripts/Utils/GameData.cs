@@ -12,14 +12,14 @@ public class GameData
     }
     public static SortedDictionary<int, LevelDefinition> levels = new()
     {
-        { 0, new() { moves = 5, goals = new() { { new Match3Item(Match3ItemType.Blue, false), 20 } } } },
-        { 200, new() { moves = 8, goals = new() {
+        { 0, new() { moves = 7, goals = new() { { new Match3Item(Match3ItemType.Blue, false), 15 } } } },
+        { 200, new() { moves = 10, goals = new() {
             {new Match3Item(Match3ItemType.Blue, false), 15},
             {new Match3Item(Match3ItemType.Red, false), 15}}}
         },
         { 500, new() { moves = 10, goals = new() {
             {new Match3Item(Match3ItemType.Blue, false), 20},
-            {new Match3Item(Match3ItemType.Red, false), 20}}}
+            {new Match3Item(Match3ItemType.Yellow, false), 15}}}
         },
         { 800, new() { moves = 12, goals = new() {
             {new Match3Item(Match3ItemType.Blue, false), 15},
@@ -27,28 +27,30 @@ public class GameData
             {new Match3Item(Match3ItemType.Yellow, false), 15}}}
         },
         { 1200, new() { moves = 15, goals = new() {
-            {new Match3Item(Match3ItemType.Blue, false), 20},
-            {new Match3Item(Match3ItemType.Red, false), 20},
-            {new Match3Item(Match3ItemType.Yellow, false), 20},
-            {new Match3Item(Match3ItemType.Green, false), 20}}}
+            {new Match3Item(Match3ItemType.Blue, false), 15},
+            {new Match3Item(Match3ItemType.Red, false), 15},
+            {new Match3Item(Match3ItemType.Yellow, false), 15},
+            {new Match3Item(Match3ItemType.Green, false), 15}}}
         },
         { 1800, new() { moves = 18, goals = new() {
-            {new Match3Item(Match3ItemType.Blue, false), 25},
-            {new Match3Item(Match3ItemType.Red, false), 25},
-            {new Match3Item(Match3ItemType.Yellow, false), 25},
-            {new Match3Item(Match3ItemType.Green, false), 25}}}
-        },
-        { 2300, new() { moves = 20, goals = new() {
             {new Match3Item(Match3ItemType.Blue, false), 30},
             {new Match3Item(Match3ItemType.Red, false), 30},
             {new Match3Item(Match3ItemType.Yellow, false), 30},
             {new Match3Item(Match3ItemType.Green, false), 30}}}
         },
+        { 2300, new() { moves = 20, goals = new() {
+            {new Match3Item(Match3ItemType.Blue, false), 30},
+            {new Match3Item(Match3ItemType.Red, false), 30},
+            {new Match3Item(Match3ItemType.Yellow, false), 30},
+            {new Match3Item(Match3ItemType.Green, false), 30},
+            {new Match3Item(Match3ItemType.Purple, false), 20}}}
+        },
         { 3000, new() { moves = 20, goals = new() {
             {new Match3Item(Match3ItemType.Blue, false), 35},
             {new Match3Item(Match3ItemType.Red, false), 35},
             {new Match3Item(Match3ItemType.Yellow, false), 35},
-            {new Match3Item(Match3ItemType.Green, false), 35}}}
+            {new Match3Item(Match3ItemType.Green, false), 35},
+            {new Match3Item(Match3ItemType.Purple, false), 35}}}
         }
     };
 
