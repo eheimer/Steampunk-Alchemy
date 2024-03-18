@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Spinach;
-using Unity.VisualScripting;
 
 public class Match3Board : MonoBehaviour
 {
@@ -219,8 +218,15 @@ public class Match3Board : MonoBehaviour
         List<Coroutine> itemAnimations = new();
         foreach (Match3Part item in itemsToRemove)
         {
-            goalTracker.ReduceGoal(item, 1);
-            itemAnimations.Add(StartCoroutine(item.YoureFired()));
+            // set the destination based on the item type.  If there is a current goal >0 for the item type,
+            // move it to the location of the goal display.  Otherwise, move it to the general score display
+            Vector3 destination = new Vector3(2, 6, item.transform.position.z - 1);
+            if (goalTracker.HasUnmetGoal(item.item))
+            {
+                var goaldest = goalTracker.GetGoalLocation(item.item).Value;
+                if (goaldest != null) destination = goaldest;
+            }
+            itemAnimations.Add(StartCoroutine(item.YoureFired((Vector3)destination)));
         }
         if (GameManager.instance.gameData.Sound)
         {
@@ -236,7 +242,7 @@ public class Match3Board : MonoBehaviour
         {
             item.isMatched = false;
         }
-        gameScene.ProcessTurn(itemsToRemove.Count);
+        gameScene.ProcessTurn(itemsToRemove);
 
         if (CheckBoard())
         {

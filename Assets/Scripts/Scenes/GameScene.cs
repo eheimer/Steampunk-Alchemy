@@ -71,9 +71,27 @@ public class GameScene : StatefulScene<GameState>
     /// <param name="pointsToGain">The number of points to add to the score for this turn.</param>
     /// <param name="subtractMoves">If true, subtracts a move from the remaining moves. If false, the number of moves remains the same.</param>
     /// <returns>True if the level goal has been reached and the level is won. False otherwise.</returns>
-    public void ProcessTurn(int pointsToGain)
+    public void ProcessTurn(List<Match3Part> scoreItems)
     {
-        scoreTracker.Change(scoreTracker.Value + pointsToGain);
+        // convert the scoreItems into a map of Match3Item to count
+        Dictionary<Match3Item, int> scoreMap = new Dictionary<Match3Item, int>();
+        foreach (Match3Part part in scoreItems)
+        {
+            if (scoreMap.ContainsKey(part.item))
+            {
+                scoreMap[part.item]++;
+            }
+            else
+            {
+                scoreMap[part.item] = 1;
+            }
+        }
+        // reduce the goals by the scoreMap
+        foreach (Match3Item item in scoreMap.Keys)
+        {
+            goalTracker.ReduceGoal(item, scoreMap[item]);
+        }
+        scoreTracker.Change(scoreTracker.Value + scoreItems.Count);
     }
 
     public bool CheckWin()

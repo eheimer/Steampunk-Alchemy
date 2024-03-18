@@ -40,10 +40,9 @@ public class Match3Part : Part
         isMoving = false;
     }
 
-    public IEnumerator YoureFired()
+    public IEnumerator YoureFired(Vector3 targetPosition)
     {
         Vector3 startPosition = transform.position;
-        Vector3 targetPosition = new Vector3(2, 6, transform.position.z);
         Vector3 startScale = transform.localScale;
         Vector3 targetScale = Vector3.zero;
         float duration = .5f; // Adjust this value to control the speed of the movement and scaling
@@ -61,7 +60,10 @@ public class Match3Part : Part
             float t = elapsedTime / duration;
 
             // Move along a quadratic bezier curve for a smooth curved motion
-            Vector3 controlPoint = startPosition + (targetPosition - startPosition) / 2 + Vector3.up;
+            float curveHeight = 2f;
+            Vector2 direction = ((Vector2)targetPosition - (Vector2)startPosition).normalized;
+            Vector3 perpendicular = new Vector2(-direction.y, direction.x) * curveHeight; // This is a vector that is perpendicular to the direction of motion
+            Vector3 controlPoint = startPosition + (targetPosition - startPosition) / 2 + perpendicular * curveHeight;
             transform.position = (1 - t) * (1 - t) * startPosition + 2 * (1 - t) * t * controlPoint + t * t * targetPosition;
 
             // Gradually shrink to nothing

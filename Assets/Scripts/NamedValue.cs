@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 
 public class NamedValue : MonoBehaviour
@@ -10,7 +9,7 @@ public class NamedValue : MonoBehaviour
     [SerializeField] TMP_Text valueText;
 
     [SerializeField] bool showTitle = true;
-    [SerializeField] AnimatorController updateAnimation;
+    [SerializeField] RuntimeAnimatorController updateAnimation;
     /// <summary>
     /// If true, the animation will be applied to a duplicate gameObject.  An animation handler
     /// will need to be attached to the gameObject to dispose of it after the animation is finished.

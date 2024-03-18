@@ -10,6 +10,20 @@ public class GoalTracker : MonoBehaviour
 
     private Dictionary<Match3Item, GoalDisplay> goals = new Dictionary<Match3Item, GoalDisplay>();
 
+    public bool HasUnmetGoal(Match3Item goalItem)
+    {
+        return goals.ContainsKey(goalItem) && goals[goalItem].Goal > 0;
+    }
+
+    public Vector3? GetGoalLocation(Match3Item goalItem)
+    {
+        if (goals.ContainsKey(goalItem))
+        {
+            return goals[goalItem].transform.position;
+        }
+        return null;
+    }
+
     public void SetGoal(Match3Item item, Vector3 location, int goal)
     {
         if (!goals.ContainsKey(item))
