@@ -238,6 +238,7 @@ public class Match3Board : MonoBehaviour
         {
             yield return itemAnimation;
         }
+        ((GameScene)GameManager.instance.currentScene).MatchDone();
         foreach (Match3Part item in itemsToRemove)
         {
             item.isMatched = false;

@@ -144,6 +144,12 @@ public class GameData
         private set { SetInt("Sound", value ? 1 : 0); }
     }
 
+    public bool Ambient
+    {
+        get { return GetInt("Ambient", 1) == 1; }
+        private set { SetInt("Ambient", value ? 1 : 0); }
+    }
+
     public void ToggleMusic()
     {
         Music = !Music;
@@ -152,5 +158,10 @@ public class GameData
     public void ToggleSound()
     {
         Sound = !Sound;
+    }
+
+    public void ToggleAmbient()
+    {
+        Ambient = !Ambient;
     }
 }

@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class StartScene : Scene
 {
   public AudioClip startMusic;
+  public AudioClip startAmbient;
   public TMP_Text experienceText;
   public AudioClip proceedSound;
 
@@ -18,7 +19,7 @@ public class StartScene : Scene
 
   public override bool HasMusic()
   {
-    return true;
+    return startMusic != null;
   }
 
   public override AudioClip GetMusic()
@@ -29,5 +30,15 @@ public class StartScene : Scene
   {
     GameManager.instance.PlaySoundEffect(proceedSound);
     SceneManager.LoadScene(SceneName.Game.name());
+  }
+
+  public override bool HasAmbient()
+  {
+    return startAmbient != null;
+  }
+
+  public override AudioClip GetAmbient()
+  {
+    return startAmbient;
   }
 }

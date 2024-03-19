@@ -25,7 +25,14 @@ public abstract class Scene : MonoBehaviour
         GameObject canvas = GameObject.Find("UI");
 
         Instantiate(settingsPrefab, canvas.transform);
-        GameManager.instance.PlayMusic(GetMusic());
+        if (HasMusic())
+        {
+            GameManager.instance.PlayMusic(GetMusic());
+        }
+        if (HasAmbient())
+        {
+            GameManager.instance.PlayAmbient(GetAmbient());
+        }
     }
 
     /// <summary>
@@ -35,6 +42,12 @@ public abstract class Scene : MonoBehaviour
     public abstract bool HasMusic();
 
     public virtual AudioClip GetMusic()
+    {
+        return null;
+    }
+
+    public abstract bool HasAmbient();
+    public virtual AudioClip GetAmbient()
     {
         return null;
     }

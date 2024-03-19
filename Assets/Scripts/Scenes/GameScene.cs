@@ -20,6 +20,7 @@ public enum GameState
 public class GameScene : StatefulScene<GameState>
 {
     public AudioClip[] levelMusic;
+    public AudioClip levelAmbient;
     public AudioClip victoryClip;
     public AudioClip failClip;
     public GameObject gameBoardPanel;
@@ -57,12 +58,22 @@ public class GameScene : StatefulScene<GameState>
 
     public override bool HasMusic()
     {
-        return true;
+        return levelMusic.Length > 0;
     }
 
     public override AudioClip GetMusic()
     {
         return levelMusic[Random.Range(0, levelMusic.Length)];
+    }
+
+    public override bool HasAmbient()
+    {
+        return levelAmbient != null;
+    }
+
+    public override AudioClip GetAmbient()
+    {
+        return levelAmbient;
     }
 
     /// <summary>
@@ -94,6 +105,21 @@ public class GameScene : StatefulScene<GameState>
         scoreTracker.Change(scoreTracker.Value + scoreItems.Count);
     }
 
+    private bool matching = false;
+    public void MatchMoveSound(AudioClip clip)
+    {
+        if (!matching)
+        {
+            matching = true;
+            GameManager.instance.PlaySoundEffect(clip);
+        }
+    }
+
+    public void MatchDone()
+    {
+        matching = false;
+    }
+
     public bool CheckWin()
     {
         return goalTracker.AllGoalsMet();
@@ -117,6 +143,8 @@ public class GameScene : StatefulScene<GameState>
         victoryScoreText.text = scoreTracker.Value.ToString();
         GameManager.instance.gameData.AddExperience(scoreTracker.Value);
         victoryExpNeededText.text = GameManager.instance.gameData.ExpToNextLevel().ToString();
+        GameManager.instance.StopMusic();
+        GameManager.instance.StopAmbient();
         GameManager.instance.PlaySoundEffect(victoryClip);
         gameBoardPanel.SetActive(false);
         victoryPanel.SetActive(true);

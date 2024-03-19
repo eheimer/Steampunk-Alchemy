@@ -8,6 +8,7 @@ public class SettingsHandler : MonoBehaviour
     public GameObject panel;
     public Toggle musicToggle;
     public Toggle soundToggle;
+    public Toggle ambientToggle;
 
     private GameScene gameScene;
     private void Start()
@@ -25,6 +26,7 @@ public class SettingsHandler : MonoBehaviour
         // set up the panel so that it shows the current settings
         musicToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Music);
         soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Sound);
+        ambientToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Ambient);
         button.SetActive(false);
         panel.SetActive(true);
     }
@@ -58,6 +60,11 @@ public class SettingsHandler : MonoBehaviour
     public void ToggleSoundAction()
     {
         GameManager.instance.gameData.ToggleSound();
+    }
+
+    public void ToggleAmbientAction()
+    {
+        GameManager.instance.gameData.ToggleAmbient();
     }
 
 

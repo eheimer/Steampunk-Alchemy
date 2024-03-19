@@ -53,8 +53,7 @@ public class Match3Part : Part
 
         // Wait before moving the parts
         yield return new WaitForSeconds(.25f);
-
-        GameManager.instance.PlaySoundEffect(moveSound);
+        ((GameScene)GameManager.instance.currentScene).MatchMoveSound(moveSound);
         while (elapsedTime < duration)
         {
             float t = elapsedTime / duration;

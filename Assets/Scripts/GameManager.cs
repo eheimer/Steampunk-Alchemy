@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     AudioSource musicPlayer;
     [SerializeField]
     AudioSource soundEffectsPlayer;
+    [SerializeField]
+    AudioSource ambientPlayer;
 
     public GameData gameData;
 
@@ -44,17 +46,29 @@ public class GameManager : MonoBehaviour
 
         musicPlayer.enabled = gameData.Music;
         soundEffectsPlayer.enabled = gameData.Sound;
+        ambientPlayer.enabled = gameData.Ambient;
 
         gameData.onValueChanged += (string key, int value) =>
         {
             if (key == "Music")
             {
                 musicPlayer.enabled = value == 1;
-                PlayMusic();
+                if (currentScene.HasMusic())
+                {
+                    PlayMusic();
+                }
             }
             if (key == "Sound")
             {
                 soundEffectsPlayer.enabled = value == 1;
+            }
+            if (key == "Ambient")
+            {
+                ambientPlayer.enabled = value == 1;
+                if (currentScene.HasAmbient())
+                {
+                    PlayAmbient(currentScene.GetAmbient());
+                }
             }
         };
     }
@@ -87,6 +101,21 @@ public class GameManager : MonoBehaviour
     public void StopMusic()
     {
         musicPlayer.Stop();
+    }
+
+    public void PlayAmbient(AudioClip clip)
+    {
+        if (ambientPlayer.enabled && ambientPlayer.isPlaying)
+        {
+            StopAmbient();
+        }
+        ambientPlayer.clip = clip;
+        ambientPlayer.Play();
+    }
+
+    public void StopAmbient()
+    {
+        ambientPlayer.Stop();
     }
 
     public void PlaySoundEffect(AudioClip clip)
