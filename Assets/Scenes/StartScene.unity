@@ -1075,6 +1075,7 @@ MonoBehaviour:
   musicPlayer: {fileID: 160322112}
   soundEffectsPlayer: {fileID: 2084446312}
   ambientPlayer: {fileID: 1499731561}
+  defaultSoundEffect: {fileID: 8300000, guid: 0378544486ec6c2408130232e4727a87, type: 3}
 --- !u!4 &1360714598
 Transform:
   m_ObjectHideFlags: 0

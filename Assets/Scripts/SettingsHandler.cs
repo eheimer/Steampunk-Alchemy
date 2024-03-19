@@ -9,11 +9,16 @@ public class SettingsHandler : MonoBehaviour
     public Toggle musicToggle;
     public Toggle soundToggle;
     public Toggle ambientToggle;
+    public Slider musicSlider;
+    public Slider soundSlider;
+    public Slider ambientSlider;
 
     private GameScene gameScene;
     private void Start()
     {
         gameScene = FindObjectOfType<GameScene>();
+        panel.SetActive(false);
+        button.SetActive(true);
     }
 
     public void SettingsButtonAction()
@@ -27,6 +32,9 @@ public class SettingsHandler : MonoBehaviour
         musicToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Music);
         soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Sound);
         ambientToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Ambient);
+        musicSlider.value = GameManager.instance.gameData.MusicVolume;
+        soundSlider.value = GameManager.instance.gameData.SoundVolume;
+        ambientSlider.value = GameManager.instance.gameData.AmbientVolume;
         button.SetActive(false);
         panel.SetActive(true);
     }
@@ -55,16 +63,79 @@ public class SettingsHandler : MonoBehaviour
     public void ToggleMusicAction()
     {
         GameManager.instance.gameData.ToggleMusic();
+        if (!GameManager.instance.gameData.Music)
+        {
+            musicSlider.SetValueWithoutNotify(0);
+        }
+        else
+        {
+            musicSlider.SetValueWithoutNotify(GameManager.instance.gameData.MusicVolume);
+        }
     }
 
     public void ToggleSoundAction()
     {
         GameManager.instance.gameData.ToggleSound();
+        if (!GameManager.instance.gameData.Sound)
+        {
+            soundSlider.SetValueWithoutNotify(0);
+        }
+        else
+        {
+            soundSlider.value = GameManager.instance.gameData.SoundVolume;
+        }
     }
 
     public void ToggleAmbientAction()
     {
         GameManager.instance.gameData.ToggleAmbient();
+        if (!GameManager.instance.gameData.Ambient)
+        {
+            ambientSlider.SetValueWithoutNotify(0);
+        }
+        else
+        {
+            ambientSlider.SetValueWithoutNotify(GameManager.instance.gameData.AmbientVolume);
+        }
+    }
+
+    public void AmbientSliderAction(float value)
+    {
+        if (value > 0f && !GameManager.instance.gameData.Ambient)
+        {
+            ambientToggle.isOn = true;
+        }
+        if (value == 0f && GameManager.instance.gameData.Ambient)
+        {
+            ambientToggle.isOn = false;
+        }
+        GameManager.instance.gameData.AmbientVolume = value;
+    }
+
+    public void MusicSliderAction(float value)
+    {
+        if (value > 0f && !GameManager.instance.gameData.Music)
+        {
+            musicToggle.isOn = true;
+        }
+        if (value == 0f && GameManager.instance.gameData.Music)
+        {
+            musicToggle.isOn = false;
+        }
+        GameManager.instance.gameData.MusicVolume = value;
+    }
+
+    public void SoundSliderAction(float value)
+    {
+        if (value > 0f && !GameManager.instance.gameData.Sound)
+        {
+            soundToggle.isOn = true;
+        }
+        if (value == 0f && GameManager.instance.gameData.Sound)
+        {
+            soundToggle.isOn = false;
+        }
+        GameManager.instance.gameData.SoundVolume = value;
     }
 
 

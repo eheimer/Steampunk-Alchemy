@@ -28,6 +28,10 @@ public class GameManager : MonoBehaviour
     AudioSource soundEffectsPlayer;
     [SerializeField]
     AudioSource ambientPlayer;
+    [SerializeField]
+    AudioClip defaultSoundEffect;
+
+    private Coroutine settingsSoundEffectSampleCoroutine;
 
     public GameData gameData;
 
@@ -44,8 +48,11 @@ public class GameManager : MonoBehaviour
         instance = this;
         DontDestroyOnLoad(gameObject);
 
+        musicPlayer.volume = gameData.MusicVolume;
         musicPlayer.enabled = gameData.Music;
+        soundEffectsPlayer.volume = gameData.SoundVolume;
         soundEffectsPlayer.enabled = gameData.Sound;
+        ambientPlayer.volume = gameData.AmbientVolume;
         ambientPlayer.enabled = gameData.Ambient;
 
         gameData.onValueChanged += (string key, int value) =>
@@ -70,7 +77,30 @@ public class GameManager : MonoBehaviour
                     PlayAmbient(currentScene.GetAmbient());
                 }
             }
+            if (key == "MusicVolume")
+            {
+                musicPlayer.volume = value / 100f;
+            }
+            if (key == "SoundVolume")
+            {
+                soundEffectsPlayer.volume = value / 100f;
+                if (settingsSoundEffectSampleCoroutine != null)
+                {
+                    StopCoroutine(settingsSoundEffectSampleCoroutine);
+                }
+                settingsSoundEffectSampleCoroutine = StartCoroutine(PlaySampleSound(0.25f));
+            }
+            if (key == "AmbientVolume")
+            {
+                ambientPlayer.volume = value / 100f;
+            }
         };
+    }
+
+    IEnumerator PlaySampleSound(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        soundEffectsPlayer.PlayOneShot(defaultSoundEffect);
     }
 
     /// <summary>

@@ -70,6 +70,17 @@ public class GameData
         onValueChanged?.Invoke(key, value);
     }
 
+    private float GetFloat(string key, float defaultValue)
+    {
+        return PlayerPrefs.GetFloat(key, defaultValue);
+    }
+
+    private void SetFloat(string key, float value)
+    {
+        PlayerPrefs.SetFloat(key, value);
+        onValueChanged?.Invoke(key, (int)(value * 100));
+    }
+
     public int Experience
     {
         get { return GetInt("Experience", 0); }
@@ -138,16 +149,34 @@ public class GameData
         private set { SetInt("Music", value ? 1 : 0); }
     }
 
+    public float MusicVolume
+    {
+        get { return GetFloat("MusicVolume", 1f); }
+        set { SetFloat("MusicVolume", value); }
+    }
+
     public bool Sound
     {
         get { return GetInt("Sound", 1) == 1; }
         private set { SetInt("Sound", value ? 1 : 0); }
     }
 
+    public float SoundVolume
+    {
+        get { return GetFloat("SoundVolume", 1f); }
+        set { SetFloat("SoundVolume", value); }
+    }
+
     public bool Ambient
     {
         get { return GetInt("Ambient", 1) == 1; }
         private set { SetInt("Ambient", value ? 1 : 0); }
+    }
+
+    public float AmbientVolume
+    {
+        get { return GetFloat("AmbientVolume", 1f); }
+        set { SetFloat("AmbientVolume", value); }
     }
 
     public void ToggleMusic()
