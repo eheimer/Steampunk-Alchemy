@@ -340,7 +340,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Failure
+  m_text: FailurE
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 96cbe23bf31d11e7295ca5509f56ab7c, type: 2}
   m_sharedMaterial: {fileID: 6858558259026521959, guid: 96cbe23bf31d11e7295ca5509f56ab7c, type: 2}
@@ -1111,8 +1111,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 135, y: -286.6894}
-  m_SizeDelta: {x: 270, y: 573.3788}
+  m_AnchoredPosition: {x: 135, y: -300}
+  m_SizeDelta: {x: 270, y: 600}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &577543152
 MonoBehaviour:
@@ -1849,7 +1849,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
       propertyPath: m_text
-      value: Acknowledge
+      value: ACKNOWLEDGE
+      objectReference: {fileID: 0}
+    - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1160630756262228313, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
       propertyPath: m_Name
@@ -2508,7 +2516,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Success
+  m_text: SuccesS
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 96cbe23bf31d11e7295ca5509f56ab7c, type: 2}
   m_sharedMaterial: {fileID: 6858558259026521959, guid: 96cbe23bf31d11e7295ca5509f56ab7c, type: 2}
@@ -3528,7 +3536,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
       propertyPath: m_text
-      value: Acknowledge
+      value: ACKNOWLEDGE
+      objectReference: {fileID: 0}
+    - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
+      propertyPath: m_fontSize
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 660859442273933835, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 1160630756262228313, guid: 2ecb9fa1081ffb27d85deb52b6dadbfa, type: 3}
       propertyPath: m_Name
