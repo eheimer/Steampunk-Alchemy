@@ -415,7 +415,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settingsPrefab: {fileID: 3341840725063979232, guid: 31926cad6fde052e1bb26dfc6d41463a, type: 3}
-  startMusic: {fileID: 0}
+  startMusic: {fileID: 8300000, guid: 6e7bbc84dc785d4cbbcb9f15689a1c54, type: 3}
   startAmbient: {fileID: 8300000, guid: d0467513f43ea7c8d984a812fc399e99, type: 3}
   experienceText: {fileID: 211835540}
   proceedSound: {fileID: 8300000, guid: 0378544486ec6c2408130232e4727a87, type: 3}

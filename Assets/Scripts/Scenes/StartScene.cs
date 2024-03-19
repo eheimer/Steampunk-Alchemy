@@ -29,6 +29,8 @@ public class StartScene : Scene
   public void PlayButtonAction()
   {
     GameManager.instance.PlaySoundEffect(proceedSound);
+    GameManager.instance.StopMusic();
+    GameManager.instance.StopAmbient();
     SceneManager.LoadScene(SceneName.Game.name());
   }
 
