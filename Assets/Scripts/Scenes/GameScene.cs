@@ -152,6 +152,8 @@ public class GameScene : StatefulScene<GameState>
 
     private void Fail()
     {
+        GameManager.instance.StopMusic();
+        GameManager.instance.StopAmbient();
         GameManager.instance.PlaySoundEffect(failClip);
         gameBoardPanel.SetActive(false);
         failPanel.SetActive(true);
