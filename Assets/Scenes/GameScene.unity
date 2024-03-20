@@ -2837,7 +2837,7 @@ MonoBehaviour:
   settingsPrefab: {fileID: 3341840725063979232, guid: 31926cad6fde052e1bb26dfc6d41463a, type: 3}
   levelMusic: []
   levelAmbient: {fileID: 8300000, guid: 4d76a3715adb785779713cf0c3b058da, type: 3}
-  victoryClip: {fileID: 0}
+  victoryClip: {fileID: 8300000, guid: 172048f07c544d1e8ab3fa4b6b4bff33, type: 3}
   failClip: {fileID: 8300000, guid: 1f0a278e22f1c06e49f2a8593dd033ef, type: 3}
   gameBoardPanel: {fileID: 2050507463}
   victoryPanel: {fileID: 577543148}
