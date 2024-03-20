@@ -12,6 +12,8 @@ public class SettingsHandler : MonoBehaviour
     public Slider musicSlider;
     public Slider soundSlider;
     public Slider ambientSlider;
+    public GameObject abortButton;
+    public GameObject resetButton;
 
     private GameScene gameScene;
     private void Start()
@@ -32,9 +34,28 @@ public class SettingsHandler : MonoBehaviour
         musicToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Music);
         soundToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Sound);
         ambientToggle.SetIsOnWithoutNotify(GameManager.instance.gameData.Ambient);
-        musicSlider.value = GameManager.instance.gameData.MusicVolume;
-        soundSlider.value = GameManager.instance.gameData.SoundVolume;
-        ambientSlider.value = GameManager.instance.gameData.AmbientVolume;
+        if (GameManager.instance.gameData.Music)
+        {
+            musicSlider.SetValueWithoutNotify(GameManager.instance.gameData.MusicVolume);
+        }
+        if (GameManager.instance.gameData.Sound)
+        {
+            soundSlider.SetValueWithoutNotify(GameManager.instance.gameData.SoundVolume);
+        }
+        if (GameManager.instance.gameData.Ambient)
+        {
+            ambientSlider.SetValueWithoutNotify(GameManager.instance.gameData.AmbientVolume);
+        }
+        if (GameManager.instance.currentScene.GetType() == typeof(GameScene))
+        {
+            abortButton.SetActive(true);
+            resetButton.SetActive(false);
+        }
+        else
+        {
+            abortButton.SetActive(false);
+            resetButton.SetActive(true);
+        }
         button.SetActive(false);
         panel.SetActive(true);
     }
